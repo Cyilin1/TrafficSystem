@@ -90,18 +90,17 @@ void Aufgabe_1() {
 }
 
 int main() {
-  // 输出表头
   // 创建一些 Fahrzeug 对象
-  Fahrzeug fahrzeug1("PKW1", 40.00);
-  Fahrzeug fahrzeug2("AUTO3", 30.00);
+  //  Fahrzeug fahrzeug1("PKW1", 40.00);
+  //  Fahrzeug fahrzeug2("AUTO3", 30.00);
 
   // 输出表头
   Fahrzeug::vKopf();
 
-  // 输出车辆数据
-  fahrzeug1.vAusgeben();
-  std::cout << std::endl; // 主函数负责换行
-  fahrzeug2.vAusgeben();
+  //  // 输出车辆数据
+  //  fahrzeug1.vAusgeben();
+  //  std::cout << std::endl; // 主函数负责换行
+  //  fahrzeug2.vAusgeben();
   std::cout << std::endl; // 主函数负责换行  Aufgabe_1();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
