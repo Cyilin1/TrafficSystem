@@ -7,6 +7,7 @@
 #include <iomanip> // 用于格式化输出
 #include <iostream>
 #include <string>
+extern double d_GlobaleZeit;
 
 class Fahrzeug {
 private:
@@ -18,31 +19,13 @@ private:
   double p_dGesamtZeit;         // 总行驶时间
   double p_dZeit;               // 最近一次模拟的时间
 public:
-  // 默认构造函数，初始化名称为空字符串，ID自增
-  Fahrzeug()
-      : p_sName(""), p_iD(++p_iMaxID), p_dMaxGeschwindigkeit(0),
-        p_dGesamtstrecke(0), p_dGesamtZeit(0), p_dZeit(0) {
-    std::cout << "Fahrzeug created: Name=\"" << p_sName << "\", ID=" << p_iD
-              << std::endl;
-  }
-  // 带名称参数的构造函数
+  Fahrzeug();
   explicit Fahrzeug(const std::string &name) : p_sName(name), p_iD(++p_iMaxID) {
     std::cout << "Fahrzeug created: Name=\"" << p_sName << "\", ID=" << p_iD
               << std::endl;
   }
-  // 带名称和最大速度的构造函数
-  Fahrzeug(const std::string &name, double maxGeschwindigkeit)
-      : p_sName(name), p_iD(++p_iMaxID),
-        p_dMaxGeschwindigkeit((maxGeschwindigkeit > 0)
-                                  ? maxGeschwindigkeit
-                                  : 0), // 保证最大速度为正值
-        p_dGesamtstrecke(0), p_dGesamtZeit(0), p_dZeit(0) {
-    std::cout << "Fahrzeug created: Name=\"" << p_sName << "\", ID=" << p_iD
-              << " created, Max Speed: " << p_dMaxGeschwindigkeit
-              << "km /h.\n ";
-  }
+  Fahrzeug(const std::string &name, double maxGeschwindigkeit);
 
-  // 析构函数
   ~Fahrzeug() {
     std::cout << "Fahrzeug destroyed: Name=\"" << p_sName << "\", ID=" << p_iD
               << std::endl;
@@ -63,6 +46,8 @@ public:
               << p_dMaxGeschwindigkeit << std::setw(10) << std::fixed
               << std::setprecision(2) << p_dGesamtstrecke;
   }
+
+  void vSimulieren();
 
   // 返回车辆名称（常量成员函数）
   const std::string &getName() const { return p_sName; }

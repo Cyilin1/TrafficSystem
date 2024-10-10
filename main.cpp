@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+double d_GlobaleZeit = 0.0; // 定义全局时钟
+
 int Fahrzeug::p_iMaxID = 0;
 
 void Aufgabe_1() {
@@ -89,7 +91,7 @@ void Aufgabe_1() {
   std::cout << "Vector cleared.\n";
 }
 
-int main() {
+void Aufgabe_1_1() {
   // 创建一些 Fahrzeug 对象
   Fahrzeug fahrzeug1("PKW1", 40.00);
   Fahrzeug fahrzeug2("AUTO3", 30.00);
@@ -102,6 +104,66 @@ int main() {
   std::cout << std::endl; // 主函数负责换行
   fahrzeug2.vAusgeben();
   std::cout << std::endl; // 主函数负责换行  Aufgabe_1();
+  // 模拟时间推进
+  d_GlobaleZeit = 2.0; // 2小时
+  fahrzeug1.vSimulieren();
+  fahrzeug2.vSimulieren();
+
+  // 第二次输出车辆数据，应该看到车辆的总里程数变化
+  fahrzeug1.vAusgeben();
+  std::cout << std::endl;
+  fahrzeug2.vAusgeben();
+  std::cout << std::endl;
+
+  d_GlobaleZeit = 5.0; // 5小时
+  fahrzeug1.vSimulieren();
+  fahrzeug2.vSimulieren();
+
+  // 输出最终车辆数据
+  fahrzeug1.vAusgeben();
+  std::cout << std::endl;
+  fahrzeug2.vAusgeben();
+  std::cout << std::endl;
+}
+
+void Aufgabe_1a0() {
+  std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
+
+  fahrzeuge.push_back(std::make_unique<Fahrzeug>("Benz", 100));
+  fahrzeuge.push_back(std::make_unique<Fahrzeug>("BMW", 80));
+  fahrzeuge.push_back(std::make_unique<Fahrzeug>("Audi", 60));
+
+  // 输出表头
+  Fahrzeug::vKopf();
+
+  // 模拟一段时间，假设总模拟时间为10小时，每次递增0.5小时
+  const double zeitschritt = 0.5; // 每次增加0.5小时
+  const double simzeit = 10.0;    // 总模拟时间为10小时
+
+  while (d_GlobaleZeit <= simzeit) {
+    // 调用每个车辆的模拟函数
+    for (auto &fahrzeug : fahrzeuge) {
+      fahrzeug->vSimulieren();
+    }
+
+    // 输出每个时间步的车辆状态
+    for (const auto &fahrzeug : fahrzeuge) {
+      fahrzeug->vAusgeben();
+      std::cout << std::endl; // 控制换行
+    }
+
+    // 输出当前时间（用于跟踪时间进度）
+    std::cout << "当前时间: " << std::fixed << std::setprecision(2)
+              << d_GlobaleZeit << " 小时" << std::endl;
+    std::cout << "--------------------------------------" << std::endl;
+    // 增加全局时钟
+    d_GlobaleZeit += zeitschritt;
+  }
+}
+
+int main() {
+  Aufgabe_1a0();
   std::cout << "\n=== 程序结束 ===" << std::endl;
+
   return 0;
 }
