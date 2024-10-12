@@ -9,6 +9,8 @@ public:
 
   virtual void vSimulieren() override;
   virtual void vAusgeben() const override;
+  virtual void vAusgeben(std::ostream &os) const override;
+
   virtual double
   dTanken(double dMenge = std::numeric_limits<double>::infinity()) override {
     return 0.0; // 自行车无油箱，不能加油

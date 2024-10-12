@@ -12,6 +12,11 @@ const double refuelInterval = 3.0;
 
 int Fahrzeug::p_iMaxID = 0;
 
+std::ostream &operator<<(std::ostream &os, const Fahrzeug &fahrzeug) {
+  fahrzeug.vAusgeben(os);
+  return os;
+}
+
 void Aufgabe_1() {
   std::cout << "=== 静态对象创建 ===" << std::endl;
   Fahrzeug fahrzeug1("Auto A"); // 静态对象
@@ -210,7 +215,9 @@ void Aufgabe_2() {
   std::cout << "\n已生成的车辆信息:\n";
   Fahrzeug::vKopf();
   for (const auto &fahrzeug : fahrzeuge) {
-    fahrzeug->vAusgeben();
+    //    fahrzeug->vAusgeben();
+    //    std::cout << std::endl;
+    std::cout << *fahrzeug;
     std::cout << std::endl;
   }
 
@@ -230,7 +237,7 @@ void Aufgabe_2() {
     // 输出车辆的当前状态
     Fahrzeug::vKopf();
     for (auto &fahrzeug : fahrzeuge) {
-      fahrzeug->vAusgeben();
+      std::cout << *fahrzeug;
       std::cout << std::endl;
     }
 

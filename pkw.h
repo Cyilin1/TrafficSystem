@@ -10,6 +10,7 @@ public:
 
   virtual void vSimulieren() override;
   virtual void vAusgeben() const override;
+  virtual void vAusgeben(std::ostream &os) const override;
   virtual double dGeschwindigkeit() const override;
 
   // 汽车特有行为

@@ -37,6 +37,11 @@ void PKW::vAusgeben() const {
             << dGeschwindigkeit();
 }
 
+void PKW::vAusgeben(std::ostream &os) const {
+  Fahrzeug::vAusgeben(os);
+  os << std::setw(10) << p_dTankinhalt << std::setw(15) << dGeschwindigkeit();
+}
+
 double PKW::dTanken(double dMenge) {
   if (dMenge == std::numeric_limits<double>::infinity()) {
     dMenge = p_dTankvolumen - p_dTankinhalt;

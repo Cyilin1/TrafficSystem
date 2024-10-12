@@ -20,6 +20,11 @@ void Fahrrad::vAusgeben() const {
   std::cout << std::setw(10) << "-" << std::setw(15) << dGeschwindigkeit();
 }
 
+void Fahrrad::vAusgeben(std::ostream &os) const {
+  Fahrzeug::vAusgeben(os);
+  os << std::setw(10) << "-" << std::setw(15) << dGeschwindigkeit();
+}
+
 double Fahrrad::dGeschwindigkeit() const {
   double dCurrentSpeed = p_dMaxGeschwindigkeit;
   double dDistance = p_dGesamtstrecke;

@@ -35,7 +35,7 @@ public:
   static void vKopf();
 
   virtual void vAusgeben() const;
-
+  virtual void vAusgeben(std::ostream &os) const;
   virtual void vSimulieren();
   virtual double dGeschwindigkeit() const;
   virtual double

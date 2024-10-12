@@ -45,6 +45,14 @@ void Fahrzeug::vAusgeben() const {
             << p_dGesamtstrecke;
 }
 
+void Fahrzeug::vAusgeben(std::ostream &os) const {
+  os << std::resetiosflags(std::ios::adjustfield)
+     << std::setiosflags(std::ios::left);
+  os << std::setw(5) << p_iD << std::setw(10) << p_sName << std::setw(10)
+     << std::fixed << std::setprecision(2) << dGeschwindigkeit()
+     << std::setw(10) << std::fixed << std::setprecision(2) << p_dGesamtstrecke;
+}
+
 void Fahrzeug::vSimulieren() {
   double dAktuelleGeschwindigkeit = dGeschwindigkeit();
   double dZeitDelta = d_GlobaleZeit - p_dZeit;
