@@ -261,11 +261,53 @@ void Aufgabe_2() {
     std::cout << "--------------------------------------------" << std::endl;
     std::cout << std::endl;
   }
+  // 使用 operator< 进行比较
+  if (fahrzeuge[0] < fahrzeuge[1]) {
+    std::cout << fahrzeuge[0]->getName() << " 的行驶距离小于 "
+              << fahrzeuge[1]->getName() << "\n";
+  } else {
+    std::cout << fahrzeuge[0]->getName() << " 的行驶距离大于或等于 "
+              << fahrzeuge[1]->getName() << "\n";
+  }
+}
+
+void vAufgabe_3() {
+  Fahrzeug fz1("Auto 1", 120.0);
+  Fahrzeug fz2("Auto 2", 150.0);
+
+  std::cout << "初始状态:" << std::endl;
+  Fahrzeug::vKopf();
+  std::cout << fz1 << std::endl;
+  std::cout << fz2 << std::endl;
+
+  fz1 = fz2; // 将 fz2 赋值给 fz1
+
+  std::cout << "\n赋值后的状态:" << std::endl;
+  Fahrzeug::vKopf();
+  std::cout << fz1 << std::endl;
+  std::cout << fz2 << std::endl;
+
+  double simTimeStep = 0.5;         // 每个时间步增加0.5小时
+  double totalSimulationTime = 8.0; // 总模拟时间5小时
+
+  while (d_GlobaleZeit < totalSimulationTime) {
+    d_GlobaleZeit += simTimeStep;
+    fz1.vSimulieren();
+    fz2.vSimulieren();
+
+    Fahrzeug::vKopf();
+    std::cout << fz1 << std::endl;
+    std::cout << fz2 << std::endl;
+
+    std::cout << "当前时间: " << std::fixed << std::setprecision(2)
+              << d_GlobaleZeit << " 小时" << std::endl;
+    std::cout << "--------------------------------------------" << std::endl;
+    std::cout << std::endl;
+  }
 }
 
 int main() {
-  Aufgabe_2();
+  vAufgabe_3();
   std::cout << "\n=== 程序结束 ===" << std::endl;
-
   return 0;
 }
