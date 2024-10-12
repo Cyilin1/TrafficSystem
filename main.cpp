@@ -1,9 +1,14 @@
 #include "Fahrzeug.h"
 
+#include "fahrrad.h"
+#include "pkw.h"
 #include <iostream>
 #include <string>
 #include <vector>
+
 double d_GlobaleZeit = 0.0; // 定义全局时钟
+const double epsilon = 1e-6;
+const double refuelInterval = 3.0;
 
 int Fahrzeug::p_iMaxID = 0;
 
@@ -161,8 +166,98 @@ void Aufgabe_1a0() {
   }
 }
 
+void Aufgabe_2() {
+  int pkwCount, fahrradCount;
+
+  std::cout << "请输入要生成的汽车数量: ";
+  std::cin >> pkwCount;
+  std::cout << "请输入要生成的自行车数量: ";
+  std::cin >> fahrradCount;
+
+  std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
+
+  for (int i = 0; i < pkwCount; ++i) {
+    std::string name;
+    double maxGeschwindigkeit, verbrauch, tankvolumen;
+
+    std::cout << "请输入第 " << (i + 1) << " 辆汽车的名称: ";
+    std::cin >> name;
+    std::cout << "请输入最大速度(km/h): ";
+    std::cin >> maxGeschwindigkeit;
+    std::cout << "请输入每百公里的油耗(升): ";
+    std::cin >> verbrauch;
+    std::cout << "请输入油箱容量(升) (可选，默认 55 升): ";
+    std::cin >> tankvolumen;
+
+    // 创建 PKW 对象并放入 vector
+    fahrzeuge.push_back(std::make_unique<PKW>(name, maxGeschwindigkeit,
+                                              verbrauch, tankvolumen));
+  }
+
+  for (int i = 0; i < fahrradCount; ++i) {
+    std::string name;
+    double maxGeschwindigkeit;
+
+    std::cout << "请输入第 " << (i + 1) << " 辆自行车的名称: ";
+    std::cin >> name;
+    std::cout << "请输入最大速度(km/h): ";
+    std::cin >> maxGeschwindigkeit;
+
+    // 创建 Fahrrad 对象并放入 vector
+    fahrzeuge.push_back(std::make_unique<Fahrrad>(name, maxGeschwindigkeit));
+  }
+
+  std::cout << "\n已生成的车辆信息:\n";
+  Fahrzeug::vKopf();
+  for (const auto &fahrzeug : fahrzeuge) {
+    fahrzeug->vAusgeben();
+    std::cout << std::endl;
+  }
+
+  double simTimeStep = 0.5;         // 每个时间步增加0.5小时
+  double totalSimulationTime = 8.0; // 总模拟时间5小时
+  double lastRefuelTime = 0.0;      // 上次加油的时间
+
+  while (d_GlobaleZeit < totalSimulationTime) {
+    // 增加全局时间
+    d_GlobaleZeit += simTimeStep;
+
+    // 模拟每个车辆的状态
+    for (auto &fahrzeug : fahrzeuge) {
+      fahrzeug->vSimulieren();
+    }
+
+    // 输出车辆的当前状态
+    Fahrzeug::vKopf();
+    for (auto &fahrzeug : fahrzeuge) {
+      fahrzeug->vAusgeben();
+      std::cout << std::endl;
+    }
+
+    if (std::fabs(d_GlobaleZeit - lastRefuelTime - refuelInterval) < epsilon ||
+        d_GlobaleZeit > lastRefuelTime + refuelInterval) {
+      std::cout << "\n达到 " << lastRefuelTime + refuelInterval
+                << " 小时，为所有汽车加满油。\n";
+      for (auto &fahrzeug : fahrzeuge) {
+        // 尝试加油
+        PKW *pkw = dynamic_cast<PKW *>(fahrzeug.get());
+        if (pkw) {
+          double fuelAdded = pkw->dTanken();
+          std::cout << pkw->getName() << " 加油: " << fuelAdded << " 升\n";
+        }
+      }
+      lastRefuelTime += refuelInterval;
+    }
+
+    std::cout << "当前时间: " << std::fixed << std::setprecision(2)
+              << d_GlobaleZeit << " 小时" << std::endl;
+    std::cout << "--------------------------------------------" << std::endl;
+    std::cout << std::endl;
+  }
+}
+
 int main() {
-  Aufgabe_1a0();
+  Aufgabe_2();
   std::cout << "\n=== 程序结束 ===" << std::endl;
 
   return 0;
