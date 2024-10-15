@@ -2,6 +2,7 @@
 #define SIMULATIONSOBJEKT_H
 
 #include <cmath>
+#include <iomanip> // 用于格式化输出
 #include <iostream>
 #include <limits>
 #include <string>
@@ -20,7 +21,7 @@ public:
   Simulationsobjekt(const Simulationsobjekt &) = delete;
   Simulationsobjekt &operator=(const Simulationsobjekt &) = delete;
 
-  // 构造函数初始化ID和名称
+  Simulationsobjekt() : p_iID(++p_iMaxID), p_sName("") {};
   explicit Simulationsobjekt(const std::string &name)
       : p_iID(++p_iMaxID), p_sName(name), p_dZeit(0.0) {
     std::cout << "Simulationsobjekt created: Name=\"" << p_sName
@@ -36,17 +37,8 @@ public:
   virtual void vSimulieren() = 0;
 
   // 输出函数
-  virtual void vAusgeben() const {
-    std::cout << "Simulationsobjekt: " << p_sName << ", ID: " << p_iID
-              << std::endl;
-  }
-
-  // 重载输出运算符
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const Simulationsobjekt &obj) {
-    obj.vAusgeben(os);
-    return os;
-  }
+  virtual void vAusgeben() const;
+  static void vKopf();
 
   // 通过ID比较相等性
   bool operator==(const Simulationsobjekt &other) const {

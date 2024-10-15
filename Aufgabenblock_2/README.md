@@ -42,7 +42,7 @@
 
 ---
 
-为了避免代码重复，应在输出时复用父类的 `vAusgeben` 方法。例如，在 `Fahrzeug` 中调用 `vAusgeben` 方法时，首先应调用 `Fahrzeug` 的方法，然后再调用 `Simulationsobjekt` 的方法。`Simulationsobjekt::vAusgeben` 只应输出对象的 ID 和名称。由于这种结构的原因，输出操作符（`operator<<`）不应在 `Simulationsobjekt` 类中定义，而应在派生类中定义。此原则同样适用于构造函数：构造函数应调用父类的构造函数，以初始化父类的变量。父类构造函数的调用应在初始化列表中进行。
+为了避免代码重复，应在输出时复用父类的 `vAusgeben` 方法。例如，`Fahrrad` 中的`vAusgeben`方法应首先调用`Fahrzeug`中的方法，而后者又应首先调用`Simulationsobjekt`中的方法。`Simulationsobjekt::vAusgeben`方法仅应输出对象的ID和名称。由于这种结构的原因，输出操作符（`operator<<`）不应在 `Simulationsobjekt` 类中定义，而应在派生类中定义。此原则同样适用于构造函数：构造函数应调用父类的构造函数，以初始化父类的变量。父类构造函数的调用应在初始化列表中进行。
 
 2. 将 `Weg` 类设为 `Simulationsobjekt` 的子类。路径应具有以下属性：长度（`p_dLaenge`）、车辆列表（`p_pFahrzeuge`，存储当前在路径上的车辆），以及允许的最大速度（`p_eTempolimit`）。车辆列表应使用智能指针 `unique_ptr`，并用 STL 的 `list` 容器来实现列表。
 

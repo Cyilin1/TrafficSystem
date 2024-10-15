@@ -1,4 +1,4 @@
-#include "Fahrzeug.h"
+#include "Simulationsobjekt.h"
 
 #include "fahrrad.h"
 #include "pkw.h"
@@ -10,7 +10,7 @@ double d_GlobaleZeit = 0.0; // 定义全局时钟
 const double epsilon = 1e-6;
 const double refuelInterval = 3.0;
 
-int Fahrzeug::p_iMaxID = 0;
+int Simulationsobjekt::p_iMaxID = 0;
 
 std::ostream &operator<<(std::ostream &os, const Fahrzeug &fahrzeug) {
   fahrzeug.vAusgeben(os);
