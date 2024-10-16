@@ -13,5 +13,5 @@ void Simulationsobjekt::vKopf() {
 void Simulationsobjekt::vAusgeben() const {
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
-  std::cout << std::setw(5) << p_iID << std::setw(10) << p_sName;
+  std::cout << std::setw(5) << p_iID << " | " << std::setw(15) << p_sName;
 }

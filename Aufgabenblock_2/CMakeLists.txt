@@ -8,6 +8,8 @@ add_executable(untitled4 main.cpp
         Fahrzeug.h
         pkw.h
         pkw.cpp
+        Weg.h
+        Weg.cpp
         fahrrad.h
         fahrrad.cpp
         Simulationsobjekt.h

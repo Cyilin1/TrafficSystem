@@ -74,21 +74,15 @@ ID | Name       | Länge  | Fahrzeuge
 
 ### 5.4 停车和行驶的车辆
 
-1. 为了让车辆具备不同的行为模式，`Fahrzeug` 类将扩展一个成员变量 `p_pVerhalten`，该变量保存指向一个即将实现的 `Verhalten` 类的实例。通过更改该对象，可以改变车辆的行为，而无需创建新车辆实例。`p_pVerhalten` 应使用智能指针来管理。
+1. 为了能够为一个车辆实现不同的行为方式，`Fahrzeug` 类应增加一个成员变量 `pVerhalten`，用于管理一个将要实现的 `Verhalten` 类的实例。通过更换这个对象，可以改变车辆的行为，而无需创建新的车辆。请考虑应选择哪种类型的智能指针来管理 `pVerhalten`。
+   在这里，行为表示我们可以区分行驶中的车辆和停放中的车辆，并且在特定条件下，车辆并不总是行驶理论上可能的距离。
+   由于行为取决于各自的路径，`Verhalten` 类将有一个构造函数，该构造函数接受并存储对一个 `Weg` 的引用。此外，还应提供一个函数 `double dStrecke(Fahrzeug& aFzg, double dZeitIntervall)` ，该函数计算车辆在给定时间间隔内能行驶的距离，而不会超过路径的终点。在 `Fahrzeug::vSimulieren` 中现有的当前部分路程的计算将被 `dStrecke` 函数的调用所取代。为了读取 `Weg` 和 `Fahrzeug` 的私有变量，可能需要编写新的 Getter 函数。
 
-在此，“行为”指的是车辆在行驶和停车之间的不同模式。
+   注意：`dStrecke` 在每个仿真步骤中只能调用一次，且中间结果应被暂时存储。
 
-由于行为取决于所行驶的路径，`Verhalten` 类应有一个构造函数，该构造函数接受一个 `Weg` 的引用并保存它。同时，还应提供一个函数 `double dStrecke(Fahrzeug& aFzg, double dZeitIntervall)`，用来计算车辆在给定时间间隔内能够行驶的距离，而不超过路径的终点。当前在 `Fahrzeug::vSimulieren` 中的部分距离计算将被 `dStrecke` 替代。为了能读取 `Weg` 和 `Fahrzeug` 的私有变量，可能需要编写新的 Getter 函数。
+   当每辆车从一条路径出发时，将为其创建一个 `Verhalten` 实例，并将其保存在 `Fahrzeug` 中。这最好通过一个新的成员函数 `Fahrzeug::vNeueStrecke(Weg&)` 实现，该函数创建适当的 `Verhalten` 对象，并将其存储在 `p_pVerhalten` 中。那么，当车辆被设置到新的路径时，旧的 `Verhalten` 实例会发生什么呢？
 
-注意：`dStrecke` 在每个仿真步骤中只能调用一次，且中间结果应被暂时存储。
-
-当每辆车从一条路径出发时，将为其创建一个 `Verhalten` 实例，并将其保存在 `Fahrzeug` 中。这最好通过一个新的成员函数 `Fahrzeug::vNeueStrecke(Weg&)` 实现，该函数创建适当的 `Verhalten` 对象，并将其存储在 `p_pVerhalten` 中。那么，当车辆被设置到新的路径时，旧的 `Verhalten` 实例会发生什么呢？
-
-当车辆在不同路径之间行驶时，应为 `Fahrzeug` 增加一个新的成员变量 `p_dAbschnittStrecke`，该变量始终存储车辆在当前路径上行驶的总距离。
-
----
-
-
+   由于车辆现在应该在不同的路径上行驶，我们在 `Fahrzeug` 类中引入了一个额外的成员变量 `p_dAbschnittStrecke`。该变量始终只存储在当前路径上行驶的距离。它将以与之前更新 `p_dGesamtStrecke` 相同的方式进行更新，并在进入新路径时重置为 0。请将此变量添加到您对 `Fahrzeug` 的计算和输出中。同时，变量 `p_dGesamtStrecke` 应继续维护。
 
 ---
 
@@ -99,6 +93,20 @@ ID | Name       | Länge  | Fahrzeuge
 在一条路径上既可以有停车的车辆，也可以有行驶的车辆。为了区分两者，`vAnnahme(unique_ptr<Fahrzeug>)` 函数应重载为另一个版本 `vAnnahme(unique_ptr<Fahrzeug>, double)`。当只传递一个指向 `Fahrzeug` 的指针时，它应像之前一样处理行驶的车辆。但如果还传递了一个时间，则该车辆应被视为停车车辆。所有车辆将存储在现有列表中。
 
 在 `Fahrzeug::vNeueStrecke` 函数中添加相应的代码，将停车车辆和行驶车辆添加到列表中。停车车辆的属性稍后可能会被忽略。
+
+
+
+由于目前对车辆没有任何限制，所以 `dStrecke` 函数如图 5.1 所示，应该在给定的时间段内返回可行驶的距离，只要不会超过路径长度（dT1... dTn-1）。在时间步长 dTn 内，应仅返回到路径终点的剩余距离，从而使车辆恰好到达路径的尽头。在最后一个时间步长 dTn+1 内，应识别出车辆已经到达路径的尽头。首先，程序应在此处仅输出一条相应的消息，表示车辆已到达路径的尽头。
+
+![image-20241015172425860](/Users/cyilin/Library/Application Support/typora-user-images/image-20241015172425860.png)
+
+2. 编写一个函数 `Weg::vAnnahme(unique_ptr<Fahrzeug>)`，该函数接收一个车辆并将其添加到路径上。为此，必须将车辆记录到车辆列表中。由于 `unique_ptr` 不能被复制，因此必须使用 `move` 移动指针。为了能够看到已登记的车辆，这些车辆会以括号形式附加在路径的输出后。此外，还必须向车辆发出信号，表明它现在处于一条新的路径上。
+
+![image-20241015172029327](/Users/cyilin/Library/Application Support/typora-user-images/image-20241015172029327.png)
+
+3. 请测试您在 `vAufgabe 5()` 中的新类，通过创建一个路径和三个车辆，将这些车辆放在路径上并模拟路径。
+4. 现在应向模拟中添加正在停放的车辆。停放的车辆需要不同的行为模式，因为它们不会移动。为此，请将 `Verhalten` 类扩展为一个类层次结构，其中 `Fahren` 和 `Parken` 两个类从 `Verhalten` 类派生出来。
+   `Verhalten` 应作为抽象基类实现。`Fahren` 类的功能应与之前的 `Verhalten` 一样，因此无需为 `Fahren` 类重复代码。`Parken` 类有一个构造函数，除了路径外，还接收车辆的启动时间。`Parken::dStrecke()` 在达到启动时间之前应返回值 0.0。当达到启动时间时，程序也应在此输出一个相应的消息。
 
 5. 修改 `vAufgabe_5`，使得程序在启动或到达终点时输出相应的消息。您也可以使用调试器进行测试。
 
