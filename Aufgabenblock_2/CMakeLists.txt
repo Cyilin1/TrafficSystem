@@ -10,6 +10,8 @@ add_executable(untitled4 main.cpp
         pkw.cpp
         Weg.h
         Weg.cpp
+        Verhalten.h
+        Verhalten.cpp
         fahrrad.h
         fahrrad.cpp
         Simulationsobjekt.h

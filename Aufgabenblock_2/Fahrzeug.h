@@ -5,6 +5,8 @@
 #ifndef FAHRZEUG_H
 #define FAHRZEUG_H
 #include "Simulationsobjekt.h"
+#include "Verhalten.h"
+
 #include <iostream>
 #include <limits>
 #include <string>
@@ -12,9 +14,12 @@ extern double d_GlobaleZeit;
 
 class Fahrzeug : public Simulationsobjekt {
 protected:
-  double p_dMaxGeschwindigkeit; // 最大速度
-  double p_dGesamtstrecke;      // 总行驶距离
-  double p_dGesamtZeit;         // 总行驶时间
+  double p_dMaxGeschwindigkeit;     // 最大速度
+  double p_dGesamtstrecke;          // 总行驶距离
+  double p_dGesamtZeit;             // 总行驶时间
+  double p_dAbschnittStrecke = 0.0; // 当前路径上的行驶距离
+
+  std::unique_ptr<Verhalten> p_pVerhalten; // 管理Verhalten的智能指针
 
 public:
   Fahrzeug(const Fahrzeug &) = delete;
@@ -47,6 +52,20 @@ public:
     }
     return *this;
   }
+
+  // 为车辆设置新路径，创建新的 Verhalten 实例
+  void vNeueStrecke(Weg &weg, bool parken = false, double startzeit = 0.0) {
+    if (parken) {
+      // 如果指定停车，则创建一个 Parken 实例，并传入开始时间
+      p_pVerhalten = std::make_unique<Verhalten>(weg);
+    } else {
+      // 否则创建一个 Fahren 实例
+      p_pVerhalten = std::make_unique<Verhalten>(weg);
+    }
+    p_dAbschnittStrecke = 0.0; // 进入新路径时重置当前路径行驶距离
+  }
+
+  double dGesamtstrecke() const { return p_dGesamtstrecke; }
 };
 
 #endif // FAHRZEUG_H

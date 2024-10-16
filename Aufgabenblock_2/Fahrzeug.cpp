@@ -42,16 +42,20 @@ void Fahrzeug::vKopf() {
 }
 
 void Fahrzeug::vSimulieren() {
-  double dAktuelleGeschwindigkeit = dGeschwindigkeit();
-  double dZeitDelta = d_GlobaleZeit - p_dZeit;
-  if (dZeitDelta <= 0)
-    return;
-  double dGefahreneStrecke = dAktuelleGeschwindigkeit * dZeitDelta;
+  if (p_pVerhalten) {
+    //    double dAktuelleGeschwindigkeit = dGeschwindigkeit();
+    double dZeitDelta = d_GlobaleZeit - p_dZeit;
+    if (dZeitDelta <= 0)
+      return;
+    //    double dGefahreneStrecke = dAktuelleGeschwindigkeit * dZeitDelta;
+    double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitDelta);
 
-  // 更新总行驶距离和总时间
-  p_dGesamtstrecke += dGefahreneStrecke;
-  p_dGesamtZeit += dZeitDelta;
-  p_dZeit = d_GlobaleZeit;
+    // 更新总行驶距离和总时间
+    p_dAbschnittStrecke += dGefahreneStrecke; // 更新当前路径上的行驶距离
+    p_dGesamtstrecke += dGefahreneStrecke;
+    p_dGesamtZeit += dZeitDelta;
+    p_dZeit = d_GlobaleZeit;
+  }
 }
 
 double Fahrzeug::dGeschwindigkeit() const { return p_dMaxGeschwindigkeit; }
