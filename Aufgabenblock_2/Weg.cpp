@@ -8,6 +8,16 @@ Weg::Weg()
 Weg::Weg(const std::string &name, double laenge, Tempolimit tempolimit)
     : Simulationsobjekt(name), p_dLaenge(laenge), p_eTempolimit(tempolimit) {}
 
+void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
+  // 使用 move 将车辆移动到车辆列表
+  p_pFahrzeuge.push_back(std::move(pFzg));
+
+  // 获取最后添加的车辆，通知它新的路径
+  p_pFahrzeuge.back()->vNeueStrecke(*this);
+  std::cout << "Fahrzeug " << p_pFahrzeuge.back()->getName() << " 被添加到路径 "
+            << p_sName << " 上。\n";
+}
+
 void Weg::vSimulieren() {
   for (auto &fahrzeug : p_pFahrzeuge) {
     fahrzeug->vSimulieren();

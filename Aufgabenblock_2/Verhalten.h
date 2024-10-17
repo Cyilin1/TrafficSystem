@@ -5,7 +5,7 @@
 
 class Verhalten {
 protected:
-  const Weg &p_rWeg;                       // 保存对 Weg 的引用
+  const Weg &p_rWeg;
   double p_dLetzteBerechneteStrecke = 0.0; // 暂存每次仿真步骤中的计算结果
 
 public:
@@ -13,9 +13,9 @@ public:
   virtual ~Verhalten() = default;
 
   // 虚函数，返回当前行为下的最大速度
-  virtual double dGeschwindigkeit(const Fahrzeug &fahrzeug) const;
+  //  double dGeschwindigkeit(const Fahrzeug &fahrzeug) const;
   // 计算在给定时间间隔内的行驶距离
-  virtual double dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall);
+  double dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall);
 
   // 获取路径的引用
   const Weg &getWeg() const { return p_rWeg; }

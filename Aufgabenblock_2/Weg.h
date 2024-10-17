@@ -28,11 +28,7 @@ public:
   Weg(const std::string &name, double laenge,
       Tempolimit tempolimit = Tempolimit::Autobahn);
 
-  // 添加车辆
-  void addFahrzeug(std::unique_ptr<Fahrzeug> fahrzeug) {
-    p_pFahrzeuge.push_back(std::move(fahrzeug));
-  }
-
+  void vAnnahme(std::unique_ptr<Fahrzeug> pFzg);
   // 模拟方法
   virtual void vSimulieren() override;
 
@@ -44,10 +40,9 @@ public:
   // ==========================GETTER=======================
   double getTempolimit() const { return static_cast<double>(p_eTempolimit); }
   double getLaenge() const { return p_dLaenge; }
-  //  friend std::ostream &operator<<(std::ostream &os, const Weg &w) {
-  //    w.vAusgeben(os);
-  //    return os;
-  //  }
+  const std::list<std::unique_ptr<Fahrzeug>> &getFahrzeuge() const {
+    return p_pFahrzeuge;
+  }
 };
 
 #endif // WEG_H

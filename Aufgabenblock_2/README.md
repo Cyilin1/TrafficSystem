@@ -86,13 +86,9 @@ ID | Name       | Länge  | Fahrzeuge
 
 ---
 
-将 `Verhalten` 类扩展为一个类层次结构，其中 `Fahren` 和 `Parken` 作为 `Verhalten` 的子类。
-
-`Verhalten` 应实现为抽象基类。`Fahren` 的功能与以前的 `Verhalten` 相同，因此请直接继承，而无需重复代码。`Parken` 类有一个构造函数，它除了接收路径之外，还接收车辆的开始时间。`Parken::dStrecke()` 在到达开始时间之前返回 0.0，当开始时间到达时，程序应首先输出一条相应的消息。
-
-在一条路径上既可以有停车的车辆，也可以有行驶的车辆。为了区分两者，`vAnnahme(unique_ptr<Fahrzeug>)` 函数应重载为另一个版本 `vAnnahme(unique_ptr<Fahrzeug>, double)`。当只传递一个指向 `Fahrzeug` 的指针时，它应像之前一样处理行驶的车辆。但如果还传递了一个时间，则该车辆应被视为停车车辆。所有车辆将存储在现有列表中。
-
 在 `Fahrzeug::vNeueStrecke` 函数中添加相应的代码，将停车车辆和行驶车辆添加到列表中。停车车辆的属性稍后可能会被忽略。
+
+---
 
 
 
@@ -105,9 +101,16 @@ ID | Name       | Länge  | Fahrzeuge
 ![image-20241015172029327](/Users/cyilin/Library/Application Support/typora-user-images/image-20241015172029327.png)
 
 3. 请测试您在 `vAufgabe 5()` 中的新类，通过创建一个路径和三个车辆，将这些车辆放在路径上并模拟路径。
-4. 现在应向模拟中添加正在停放的车辆。停放的车辆需要不同的行为模式，因为它们不会移动。为此，请将 `Verhalten` 类扩展为一个类层次结构，其中 `Fahren` 和 `Parken` 两个类从 `Verhalten` 类派生出来。
-   `Verhalten` 应作为抽象基类实现。`Fahren` 类的功能应与之前的 `Verhalten` 一样，因此无需为 `Fahren` 类重复代码。`Parken` 类有一个构造函数，除了路径外，还接收车辆的启动时间。`Parken::dStrecke()` 在达到启动时间之前应返回值 0.0。当达到启动时间时，程序也应在此输出一个相应的消息。
 
+4. 现在，模拟中应添加停放的车辆。停放的车辆需要不同的行为模式，因为它们不会移动。
+   
+为此，请将 `Verhalten` 类扩展为一个类层次结构，其中 `Fahren` 和 `Parken` 两个类从 `Verhalten` 类派生出来。
+   `Verhalten` 应作为抽象基类实现。`Fahren` 类的功能应与之前的 `Verhalten` 一样，因此无需为 `Fahren` 类重复代码。`Parken` 类有一个构造函数，除了路径外，还接收车辆的启动时间。`Parken::dStrecke()` 在达到启动时间之前应返回值 0.0。当达到启动时间时，程序也应在此输出一个相应的消息。
+   
+   在一条路径上既可以有停放的车辆，也可以有行驶的车辆。为了区分它们，应重载函数 `vAnnahme(unique_ptr<Fahrzeug>)`，新增一个函数 `vAnnahme(unique_ptr<Fahrzeug>, double)`。如果只接收到一个车辆指针作为参数，则像以前一样接纳行驶中的车辆。然而，如果传递的是车辆指针和一个开始时间，则接纳停放的车辆。所有的车辆应继续在现有的列表中进行管理。
+   
+   请相应地重载函数 `Fahrzeug::vNeueStrecke`。将行驶的车辆添加到列表的末尾，停放的车辆添加到列表的前端。这个特性我们之后还会用到。
+   
 5. 修改 `vAufgabe_5`，使得程序在启动或到达终点时输出相应的消息。您也可以使用调试器进行测试。
 
 ### 5.5 开车、到达终点（异常处理）
