@@ -1,7 +1,7 @@
 #ifndef WEG_H
 #define WEG_H
 
-#include "Simulationsobjekt.h" // 只在这里前向声明 Fahrzeug 类
+#include "Simulationsobjekt.h"
 #include <iostream>
 #include <limits> // For std::numeric_limits
 #include <list>
@@ -29,6 +29,8 @@ public:
       Tempolimit tempolimit = Tempolimit::Autobahn);
 
   void vAnnahme(std::unique_ptr<Fahrzeug> pFzg);
+  // 重载函数，接纳停放的车辆
+  void vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit);
   // 模拟方法
   virtual void vSimulieren() override;
 

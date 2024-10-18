@@ -53,18 +53,11 @@ public:
     return *this;
   }
 
-  // 为车辆设置新路径，创建新的 Verhalten 实例
-  void vNeueStrecke(Weg &weg, bool parken = false, double startzeit = 0.0) {
-    if (parken) {
-      // 如果指定停车，则创建一个 Parken 实例，并传入开始时间
-      p_pVerhalten = std::make_unique<Verhalten>(weg);
-    } else {
-      // 否则创建一个 Fahren 实例
-      p_pVerhalten = std::make_unique<Verhalten>(weg);
-    }
-    p_dAbschnittStrecke = 0.0; // 进入新路径时重置当前路径行驶距离
-  }
+  void vNeueStrecke(Weg &weg);
 
+  // 重载 vNeueStrecke 函数，处理停放车辆（有开始时间）
+  void vNeueStrecke(Weg &weg, double dStartzeit);
+  double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
   double dGesamtstrecke() const { return p_dGesamtstrecke; }
 };
 

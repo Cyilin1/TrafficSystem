@@ -3,6 +3,8 @@
 //
 
 #include "Fahrzeug.h"
+#include "Fahren.h"
+#include "Parken.h"
 
 Fahrzeug::Fahrzeug() : Simulationsobjekt() {}
 
@@ -56,6 +58,16 @@ void Fahrzeug::vSimulieren() {
     p_dGesamtZeit += dZeitDelta;
     p_dZeit = d_GlobaleZeit;
   }
+}
+
+void Fahrzeug::vNeueStrecke(Weg &weg) {
+  p_pVerhalten = std::make_unique<Fahren>(weg); // 设置为行驶行为
+  p_dAbschnittStrecke = 0.0;                    // 重置当前路径的行驶距离
+}
+
+void Fahrzeug::vNeueStrecke(Weg &weg, double dStartzeit) {
+  p_pVerhalten = std::make_unique<Parken>(weg, dStartzeit); // 设置为停放行为
+  p_dAbschnittStrecke = 0.0; // 重置当前路径的行驶距离
 }
 
 double Fahrzeug::dGeschwindigkeit() const { return p_dMaxGeschwindigkeit; }

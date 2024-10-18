@@ -236,40 +236,43 @@ void vAufgabe_4() {
 }
 
 void vAufgabe_5() {
-  // 创建路径对象
   Weg weg("Landstrasse", 100.0); // 100 长度的路径 Landstrasse
 
-  // 创建三辆不同的车
   std::unique_ptr<Fahrzeug> bmw = std::make_unique<Fahrzeug>("BMW", 120.0);
   std::unique_ptr<Fahrzeug> audi = std::make_unique<Fahrzeug>("Audi", 130.0);
   std::unique_ptr<Fahrzeug> bmx = std::make_unique<Fahrzeug>("BMX", 25.0);
 
-  // 将车辆添加到路径上
   weg.vAnnahme(std::move(bmw));
-  weg.vAnnahme(std::move(audi));
+  weg.vAnnahme(std::move(audi), 1.0);
   weg.vAnnahme(std::move(bmx));
 
-  Weg::vKopf();
-  std::cout << weg << std::endl;
-
-  // 模拟路径上的车辆
   std::cout << "\n模拟路径上的车辆行驶：" << std::endl;
 
   // 模拟一段时间，假设总模拟时间为10小时，每次递增0.5小时
   const double zeitschritt = 0.5; // 每次增加0.5小时
-  const double simzeit = 10.0;    // 总模拟时间为10小时
+  const double simzeit = 5.0;     // 总模拟时间为10小时
+  int round = 1;
 
   while (d_GlobaleZeit <= simzeit) {
     // 调用每个车辆的模拟函数
-    weg.vSimulieren();
-    std::cout << weg << std::endl; // 输出每一步仿真后的路径状态
+    std::cout << "Round " << round << " 开始" << std::endl;
 
+    weg.vSimulieren();
+    Weg::vKopf();
+    std::cout << weg << std::endl; // 输出每一步仿真后的路径状态
+    // 输出车辆的当前状态
+    Fahrzeug::vKopf();
+    for (auto &fahrzeug : weg.getFahrzeuge()) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
     // 输出当前时间（用于跟踪时间进度）
     std::cout << "当前时间: " << std::fixed << std::setprecision(2)
               << d_GlobaleZeit << " 小时" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
     // 增加全局时钟
     d_GlobaleZeit += zeitschritt;
+    round++;
   }
 }
 

@@ -18,6 +18,11 @@ void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
             << p_sName << " 上。\n";
 }
 
+void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit) {
+  pFahrzeug->vNeueStrecke(*this, dStartzeit);    // 设置停放行为
+  p_pFahrzeuge.push_front(std::move(pFahrzeug)); // 添加到列表前端
+}
+
 void Weg::vSimulieren() {
   for (auto &fahrzeug : p_pFahrzeuge) {
     fahrzeug->vSimulieren();
@@ -33,7 +38,7 @@ void Weg::vAusgeben(std::ostream &os) const {
   os << "(";
   for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
     if (it != p_pFahrzeuge.begin()) {
-      os << ", "; // 车辆之间添加逗号和空格
+      os << ", ";
     }
     os << (*it)->getName();
   }
@@ -45,7 +50,7 @@ void Weg::vAusgeben() const {
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
   std::cout << " : " << std::setw(10) << p_dLaenge << " : ";
-  // 输出车辆列表
+
   std::cout << "(";
   for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
     if (it != p_pFahrzeuge.begin()) {
