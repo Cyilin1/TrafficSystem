@@ -10,9 +10,9 @@
 class Fahrzeug;
 
 enum class Tempolimit {
-  Innerorts = 50,
-  Landstrasse = 100,
-  Autobahn = std::numeric_limits<int>::max()
+  Unlimited,   // 无速度限制
+  Landstrasse, // 乡村道路，限速 100 km/h
+  Innerorts    // 市区道路，限速 50 km/h
 };
 
 class Weg : public Simulationsobjekt {
@@ -26,11 +26,12 @@ public:
 
   // 带名称、长度和可选速度限制的构造函数
   Weg(const std::string &name, double laenge,
-      Tempolimit tempolimit = Tempolimit::Autobahn);
+      Tempolimit tempolimit = Tempolimit::Unlimited);
 
   void vAnnahme(std::unique_ptr<Fahrzeug> pFzg);
   // 重载函数，接纳停放的车辆
   void vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit);
+
   // 模拟方法
   virtual void vSimulieren() override;
 
@@ -42,6 +43,9 @@ public:
   // ==========================GETTER=======================
   double getTempolimit() const { return static_cast<double>(p_eTempolimit); }
   double getLaenge() const { return p_dLaenge; }
+
+  double dGetTempolimit() const;
+
   const std::list<std::unique_ptr<Fahrzeug>> &getFahrzeuge() const {
     return p_pFahrzeuge;
   }

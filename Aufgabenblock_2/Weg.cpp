@@ -1,9 +1,10 @@
 #include "Weg.h"
 #include "Fahrzeug.h"
+#include "Fahrzeugausnahme.h"
 
 Weg::Weg()
     : Simulationsobjekt(""), p_dLaenge(0.0),
-      p_eTempolimit(Tempolimit::Autobahn) {}
+      p_eTempolimit(Tempolimit::Unlimited) {}
 
 Weg::Weg(const std::string &name, double laenge, Tempolimit tempolimit)
     : Simulationsobjekt(name), p_dLaenge(laenge), p_eTempolimit(tempolimit) {}
@@ -21,11 +22,18 @@ void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit) {
   pFahrzeug->vNeueStrecke(*this, dStartzeit);    // 设置停放行为
   p_pFahrzeuge.push_front(std::move(pFahrzeug)); // 添加到列表前端
+  std::cout << "Fahrzeug " << p_pFahrzeuge.front()->getName()
+            << " 被添加到路径 " << p_sName << " 上， 停放时间为 " << dStartzeit
+            << " 小时\n";
 }
 
 void Weg::vSimulieren() {
-  for (auto &fahrzeug : p_pFahrzeuge) {
-    fahrzeug->vSimulieren();
+  try {
+    for (auto &fzg : p_pFahrzeuge) {
+      fzg->vSimulieren();
+    }
+  } catch (const Fahrzeugausnahme &ex) {
+    ex.vBearbeiten(); // 调用异常的处理函数
   }
 }
 
@@ -33,7 +41,7 @@ void Weg::vAusgeben(std::ostream &os) const {
   Simulationsobjekt::vAusgeben();
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
-  os << " : " << std::setw(10) << p_dLaenge << " | ";
+  os << std::setw(10) << p_dLaenge << " | ";
   // 输出车辆列表
   os << "(";
   for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
@@ -49,7 +57,7 @@ void Weg::vAusgeben() const {
   Simulationsobjekt::vAusgeben();
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
-  std::cout << " : " << std::setw(10) << p_dLaenge << " : ";
+  std::cout << std::setw(10) << p_dLaenge << " : ";
 
   std::cout << "(";
   for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
@@ -59,6 +67,19 @@ void Weg::vAusgeben() const {
     std::cout << (*it)->getName();
   }
   std::cout << ")";
+}
+
+double Weg::dGetTempolimit() const {
+  switch (p_eTempolimit) {
+  case Tempolimit::Unlimited:
+    return std::numeric_limits<double>::max(); // 无速度限制
+  case Tempolimit::Landstrasse:
+    return 100.0; // 乡村道路限速100 km/h
+  case Tempolimit::Innerorts:
+    return 50.0; // 市区道路限速50 km/h
+  default:
+    return std::numeric_limits<double>::max();
+  }
 }
 
 void Weg::vKopf() {

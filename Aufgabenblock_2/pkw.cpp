@@ -1,4 +1,5 @@
 #include "pkw.h"
+#include "Fahrzeugausnahme.h"
 
 PKW::PKW(const std::string &name, double maxGeschwindigkeit, double verbrauch,
          double tankvolumen)
@@ -7,13 +8,42 @@ PKW::PKW(const std::string &name, double maxGeschwindigkeit, double verbrauch,
   // 油箱中的油量初始化为油箱容量的一半
 }
 
+// void PKW::vSimulieren() {
+//   double dZeitDelta = d_GlobaleZeit - p_dZeit;
+//   if (dZeitDelta <= 0)
+//     return;
+
+//  double dGefahreneStrecke = dGeschwindigkeit() * dZeitDelta;
+
+//  // 计算所需油量
+//  double dBenotigteMenge = (dGefahreneStrecke / 100.0) * p_dVerbrauch;
+
+//  // 如果油量不足，车辆只能行驶部分距离
+//  if (dBenotigteMenge > p_dTankinhalt) {
+//    dGefahreneStrecke = (p_dTankinhalt / p_dVerbrauch) * 100.0;
+//    p_dTankinhalt = 0; // 油量耗尽
+//  } else {
+//    p_dTankinhalt -= dBenotigteMenge;
+//  }
+
+//  // 更新总行驶距离和总行驶时间
+//  p_dGesamtstrecke += dGefahreneStrecke;
+//  p_dGesamtZeit += dZeitDelta;
+//  p_dZeit = d_GlobaleZeit;
+//  // 检查是否需要抛出异常
+//  if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
+//    throw Streckenende(*this, p_pVerhalten->getWeg());
+//    //  抛出到达终点异常
+//  }
+//}
+
 void PKW::vSimulieren() {
+  if (!p_pVerhalten)
+    return;
   double dZeitDelta = d_GlobaleZeit - p_dZeit;
   if (dZeitDelta <= 0)
     return;
-
-  double dGefahreneStrecke = p_dMaxGeschwindigkeit * dZeitDelta;
-
+  double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitDelta);
   // 计算所需油量
   double dBenotigteMenge = (dGefahreneStrecke / 100.0) * p_dVerbrauch;
 
@@ -29,6 +59,11 @@ void PKW::vSimulieren() {
   p_dGesamtstrecke += dGefahreneStrecke;
   p_dGesamtZeit += dZeitDelta;
   p_dZeit = d_GlobaleZeit;
+  // 检查是否需要抛出异常
+  if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
+    throw Streckenende(*this, p_pVerhalten->getWeg());
+    //  抛出到达终点异常
+  }
 }
 
 void PKW::vAusgeben() const {
@@ -54,4 +89,15 @@ double PKW::dTanken(double dMenge) {
   return tatsaechlicheMenge;
 }
 
-double PKW::dGeschwindigkeit() const { return p_dMaxGeschwindigkeit; }
+double PKW::dGeschwindigkeit() const {
+  double maxGeschwindigkeit = p_dMaxGeschwindigkeit;
+  if (p_pVerhalten) {
+    double wegTempolimit = p_pVerhalten->getWeg().dGetTempolimit();
+    //    if (maxGeschwindigkeit > wegTempolimit) {
+    //      std::cout << "超过限速，进行降速操作！！" << std::endl;
+    //      maxGeschwindigkeit = wegTempolimit;
+    //    }
+    return std::min(maxGeschwindigkeit, wegTempolimit); // 取最小值
+  }
+  return maxGeschwindigkeit;
+}

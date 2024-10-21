@@ -53,5 +53,7 @@ public:
 
   // 获取时间
   double getZeit() const { return p_dZeit; }
+
+  void setZeit(double zeit) { p_dZeit = zeit; }
 };
 #endif // SIMULATIONSOBJEKT_H

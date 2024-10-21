@@ -1,14 +1,23 @@
 #include "Parken.h"
+#include "Fahren.h"
 #include "Fahrzeug.h"
+#include "Fahrzeugausnahme.h"
 
 double Parken::dStrecke(Fahrzeug &aFzg, double dZeitIntervall) {
-  if (d_GlobaleZeit <= p_dStartzeit) {
+  if (d_GlobaleZeit < p_dStartzeit) {
     std::cout << "Fahrzeug " << aFzg.getName() << " 停放中，启动时间未到达。"
               << std::endl;
     return 0.0;
-  } else {
+  }
+
+  if (!bGestartet) {
     std::cout << "Fahrzeug " << aFzg.getName() << " 启动了，开始行驶。"
               << std::endl;
-    return Verhalten::dStrecke(aFzg, dZeitIntervall);
+    bGestartet = true;
+    aFzg.setZeit(d_GlobaleZeit);
+    aFzg.vLosfahren();
   }
+
+  //  throw Losfahren(aFzg, Verhalten::getWeg());
+  return Verhalten::dStrecke(aFzg, dZeitIntervall);
 }

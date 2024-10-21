@@ -230,7 +230,7 @@ void vAufgabe_3() {
 
 void vAufgabe_4() {
   // 创建一个 Weg 对象，名称为"Autobahn"，长度为100，默认速度限制为无限制
-  Weg autobahn("Autobahn", 100.0, Tempolimit::Autobahn);
+  Weg autobahn("Autobahn", 100.0, Tempolimit::Unlimited);
   Weg::vKopf();
   std::cout << autobahn << std::endl;
 }
@@ -276,8 +276,52 @@ void vAufgabe_5() {
   }
 }
 
+void vAufgabe_6() {
+  Weg landstrasse("Landstrasse", 1000.0, Tempolimit::Landstrasse);
+  Weg innerorts("Innenstadt", 500.0, Tempolimit::Unlimited);
+
+  std::unique_ptr<PKW> bmw =
+      std::make_unique<PKW>("BMW", 120.0); // 最大速度120 km/h
+  std::unique_ptr<PKW> audi =
+      std::make_unique<PKW>("Audi", 130.0); // 最大速度130 km/h
+
+  // 将车辆添加到路径上
+  landstrasse.vAnnahme(std::move(bmw));
+  innerorts.vAnnahme(std::move(audi), 1.0);
+
+  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
+  const double zeitschritt = 0.5;
+  const double simzeit = 3.0;
+
+  while (d_GlobaleZeit <= simzeit) {
+    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
+
+    landstrasse.vSimulieren();
+    innerorts.vSimulieren();
+
+    Fahrzeug::vKopf();
+    for (auto &fahrzeug : landstrasse.getFahrzeuge()) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    for (auto &fahrzeug : innerorts.getFahrzeuge()) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    std::cout << "==================车辆信息Finished=================="
+              << std::endl;
+
+    Weg::vKopf();
+    std::cout << landstrasse << std::endl; // 输出乡村道路上的车辆状态
+    std::cout << innerorts << std::endl;   // 输出市区道路上的车辆状态
+    std::cout << "==================================" << std::endl;
+    std::cout << "==================================" << std::endl;
+    d_GlobaleZeit += zeitschritt;
+  }
+}
+
 int main() {
-  vAufgabe_5();
+  vAufgabe_6();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }

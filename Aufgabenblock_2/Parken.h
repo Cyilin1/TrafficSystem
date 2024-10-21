@@ -12,7 +12,8 @@ public:
   double dStrecke(Fahrzeug &aFzg, double dZeitIntervall) override;
 
 private:
-  double p_dStartzeit; // 停放开始时间
+  double p_dStartzeit;     // 停放开始时间
+  bool bGestartet = false; // 记录是否已经启动
 };
 
 #endif // PARKEN_H

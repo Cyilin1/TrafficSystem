@@ -21,16 +21,16 @@
 
 class Verhalten {
 public:
-  explicit Verhalten(const Weg &weg) : p_rWeg(weg) {}
+  explicit Verhalten(Weg &weg) : p_rWeg(weg) {}
   virtual ~Verhalten() {};
 
   // 纯虚函数，子类必须实现
   virtual double dStrecke(Fahrzeug &aFzg, double dZeitIntervall) = 0;
   // 获取路径的引用
-  const Weg &getWeg() const { return p_rWeg; }
+  Weg &getWeg() const { return p_rWeg; }
 
 protected:
-  const Weg &p_rWeg;                       // 路径引用
+  Weg &p_rWeg;                             // 路径引用
   double p_dLetzteBerechneteStrecke = 0.0; // 暂存每次仿真步骤中的计算结果
 };
 

@@ -16,6 +16,8 @@ add_executable(untitled4 main.cpp
         fahrrad.cpp
         Simulationsobjekt.h
         Simulationsobjekt.cpp
+        Fahrzeugausnahme.h
+        Fahrzeugausnahme.cpp
         Fahren.h
         Fahren.cpp
         Parken.h

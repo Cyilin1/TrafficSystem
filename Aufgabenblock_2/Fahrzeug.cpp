@@ -4,6 +4,7 @@
 
 #include "Fahrzeug.h"
 #include "Fahren.h"
+#include "Fahrzeugausnahme.h"
 #include "Parken.h"
 
 Fahrzeug::Fahrzeug() : Simulationsobjekt() {}
@@ -26,19 +27,16 @@ void Fahrzeug::vAusgeben() const {
 
 void Fahrzeug::vAusgeben(std::ostream &os) const {
   Simulationsobjekt::vAusgeben();
-  os << std::resetiosflags(std::ios::adjustfield)
-     << std::setiosflags(std::ios::left);
   os << std::setw(10) << std::fixed << std::setprecision(2)
-     << dGeschwindigkeit() << std::setw(10) << std::fixed
-     << std::setprecision(2) << p_dGesamtstrecke;
+     << dGeschwindigkeit() << " | " << std::setw(10) << std::fixed
+     << std::setprecision(2) << p_dGesamtstrecke << " | ";
 }
 
 void Fahrzeug::vKopf() {
-  std::cout << std::resetiosflags(std::ios::adjustfield)
-            << std::setiosflags(std::ios::left);
-  std::cout << std::setw(5) << "ID" << std::setw(10) << "Name" << std::setw(10)
-            << "Max Speed" << std::setw(10) << "Mileage" << std::setw(10)
-            << "Fuel" << std::setw(15) << "Current Speed" << std::endl;
+  Simulationsobjekt::vKopf();
+  std::cout << std::setw(10) << "Max Speed" << " | " << std::setw(10)
+            << "Mileage" << " | " << std::setw(10) << "Fuel" << std::setw(15)
+            << "Current Speed" << std::endl;
   std::cout << "-------------------------------------------------------"
             << std::endl;
 }
@@ -57,6 +55,12 @@ void Fahrzeug::vSimulieren() {
     p_dGesamtstrecke += dGefahreneStrecke;
     p_dGesamtZeit += dZeitDelta;
     p_dZeit = d_GlobaleZeit;
+
+    // 检查是否需要抛出异常
+    if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
+      throw Streckenende(*this, p_pVerhalten->getWeg());
+      //  抛出到达终点异常
+    }
   }
 }
 
@@ -71,3 +75,7 @@ void Fahrzeug::vNeueStrecke(Weg &weg, double dStartzeit) {
 }
 
 double Fahrzeug::dGeschwindigkeit() const { return p_dMaxGeschwindigkeit; }
+
+void Fahrzeug::vLosfahren() {
+  throw Losfahren(*this, p_pVerhalten->getWeg()); // 抛出启动异常
+}

@@ -53,6 +53,8 @@ public:
     return *this;
   }
 
+  void vLosfahren();
+
   void vNeueStrecke(Weg &weg);
 
   // 重载 vNeueStrecke 函数，处理停放车辆（有开始时间）
