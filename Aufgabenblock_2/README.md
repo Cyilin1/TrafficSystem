@@ -104,13 +104,14 @@ ID | Name       | Länge  | Fahrzeuge
 
 4. 现在，模拟中应添加停放的车辆。停放的车辆需要不同的行为模式，因为它们不会移动。
    
+
 为此，请将 `Verhalten` 类扩展为一个类层次结构，其中 `Fahren` 和 `Parken` 两个类从 `Verhalten` 类派生出来。
    `Verhalten` 应作为抽象基类实现。`Fahren` 类的功能应与之前的 `Verhalten` 一样，因此无需为 `Fahren` 类重复代码。`Parken` 类有一个构造函数，除了路径外，还接收车辆的启动时间。`Parken::dStrecke()` 在达到启动时间之前应返回值 0.0。当达到启动时间时，程序也应在此输出一个相应的消息。
-   
+
    在一条路径上既可以有停放的车辆，也可以有行驶的车辆。为了区分它们，应重载函数 `vAnnahme(unique_ptr<Fahrzeug>)`，新增一个函数 `vAnnahme(unique_ptr<Fahrzeug>, double)`。如果只接收到一个车辆指针作为参数，则像以前一样接纳行驶中的车辆。然而，如果传递的是车辆指针和一个开始时间，则接纳停放的车辆。所有的车辆应继续在现有的列表中进行管理。
-   
+
    请相应地重载函数 `Fahrzeug::vNeueStrecke`。将行驶的车辆添加到列表的末尾，停放的车辆添加到列表的前端。这个特性我们之后还会用到。
-   
+
 5. 修改 `vAufgabe_5`，使得程序在启动或到达终点时输出相应的消息。您也可以使用调试器进行测试。
 
 ### 5.5 开车、到达终点（异常处理）
@@ -147,15 +148,7 @@ ID | Name       | Länge  | Fahrzeuge
 - `SimuClientSocket.cpp`
 - `SimuServer.jar`
 
-这些文件可以在 Moodle 上的模板文件部分找到。
-
----
-
-
-
----
-
-### 图形接口
+#### 图形接口
 
 图形库的函数只处理传递的值，并不了解您项目中的其他数据。在调用时，会对值进行语法和语义合理性检查。这意味着：
 
@@ -204,11 +197,23 @@ c) 车辆只能绘制在通过两条路径定义的道路上。
 
 - `bZeichnePKW(string PKWName, string WegName, double RelPosition, double KmH, double Tank);`
 
+* `bZeichneFahrrad(string FahrradName, string WegName, double RelPosition, double KmH);`
+    这些函数分别在通过其名称标识的路径上绘制一辆汽车/自行车的符号表示。相对于路径长度已行驶的距离（值在0到1之间）通过 `RelPosition` 指定。参数 `KmH` 将接收函数 `dGeschwindigkeit()` 的输出值，参数 `Tank` 则接收当前油箱容量，
+
+* `BeendeGrafik();`
+  通过此函数将断开与图形服务器的连接，窗口将自动关闭。
+
+* `void vSleep(int zeit_ms);`
+  通过此函数将使程序的进一步执行延迟 `zeit_ms` 毫秒。
+
 ---
 
+2. 将 `vAufgabe 6()` 扩展，使图形输出能够被测试。请在您的 `main.cpp` 文件中包含头文件 `SimuClient.h`。将两条路径的长度分别设置为500公里，并将它们在图形上组合成一条道路（往返）。
+3. 为了在绘制时根据车辆对象类型调用正确的绘制函数，应为汽车和自行车实现一个 `vZeichnen(const Weg&) const` 函数。为此，需要在 `Fahrzeug` 中将该函数声明为虚函数，并在各自的子类中重写。该函数将接收一个引用参数，即车辆要绘制所在的路径，并调用相应的绘制函数（如上所述）。
+4. 在每次仿真中让车辆在路径上绘制。
+5. 运行您的仿真。为了更好地跟踪仿真过程，在循环中调用 `vSleep` 函数。根据所使用计算机的计算性能，您可以调整延迟时间（例如 100 毫秒）。
 
-
----
+## 5.7 延迟更新（模板）
 
 当车辆到达终点时，它会立即从列表中删除。为此，编写一个函数 `unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug&)`。在该函数中，您需要在存储的列表 `list<unique_ptr<Fahrzeug>>` 中查找传递的车辆。使用 `operator==` 来比较车辆，并注意空指针的特殊情况。当找到车辆时，将 `unique_ptr` 移动（`move`）到局部变量，并从列表中删除该车辆。然后，您可以返回之前本地存储的指针。通过 `Weg::pAbgabe` 和 `Weg::vAnnahme` 函数，您现在可以调整 `Losfahren` 的处理函数。
 
