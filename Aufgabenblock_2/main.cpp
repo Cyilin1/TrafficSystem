@@ -1,4 +1,4 @@
-#include "SimuClient.h"
+﻿#include "SimuClient.h"
 #include "Simulationsobjekt.h"
 #include "Weg.h"
 #include "fahrrad.h"
@@ -277,8 +277,11 @@ void vAufgabe_5() {
 }
 
 void vAufgabe_6() {
-  Weg landstrasse("Landstrasse", 1000.0, Tempolimit::Landstrasse);
-  Weg innerorts("Innenstadt", 500.0, Tempolimit::Unlimited);
+  bInitialisiereGrafik(800, 500);
+
+  // 创建两条路径，一条有乡村道路限速100 km/h，一条市区道路限速50 km/h
+  Weg landstrasse("LandstrasseHin", 500.0, Tempolimit::Landstrasse);
+  Weg innerorts("LandstrasseRueck", 500.0, Tempolimit::Innerorts);
 
   std::unique_ptr<PKW> bmw =
       std::make_unique<PKW>("BMW", 120.0); // 最大速度120 km/h
@@ -289,12 +292,19 @@ void vAufgabe_6() {
   landstrasse.vAnnahme(std::move(bmw));
   innerorts.vAnnahme(std::move(audi), 1.0);
 
+  // 设置往返道路的图形
+  int koordHin[] = {700, 250, 100, 250};   // 往道路的坐标
+  int koordRueck[] = {100, 300, 700, 300}; // 返道路的坐标
+  bZeichneStrasse("LandstrasseHin", "LandstrasseRueck", 500, 2, koordHin);
+  bZeichneStrasse("LandstrasseRueck", "LandstrasseHin", 500, 2, koordRueck);
+
   // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
   const double zeitschritt = 0.5;
   const double simzeit = 3.0;
 
   while (d_GlobaleZeit <= simzeit) {
     std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
+    vSetzeZeit(d_GlobaleZeit);
 
     landstrasse.vSimulieren();
     innerorts.vSimulieren();
@@ -320,8 +330,96 @@ void vAufgabe_6() {
   }
 }
 
+void vAufgabe_6_1() {
+  bInitialisiereGrafik(800, 500);
+
+  // 创建两条路径，一条有乡村道路限速100 km/h，一条市区道路限速50 km/h
+  Weg landstrasse("LandstrasseHin", 500.0, Tempolimit::Landstrasse);
+  Weg innerorts("LandstrasseRueck", 500.0, Tempolimit::Innerorts);
+
+  std::unique_ptr<PKW> bmw =
+      std::make_unique<PKW>("BMW", 120.0); // 最大速度120 km/h
+  std::unique_ptr<PKW> audi =
+      std::make_unique<PKW>("Audi", 130.0); // 最大速度130 km/h
+
+  // 将车辆添加到路径上
+  landstrasse.vAnnahme(std::move(bmw));
+  innerorts.vAnnahme(std::move(audi), 1.0);
+
+  // 设置往返道路的图形
+  int koordHin[] = {700, 250, 100, 250};   // 往道路的坐标
+  int koordRueck[] = {100, 300, 700, 300}; // 返道路的坐标
+  bZeichneStrasse("LandstrasseHin", "LandstrasseRueck", 500, 2, koordHin);
+  bZeichneStrasse("LandstrasseRueck", "LandstrasseHin", 500, 2, koordRueck);
+
+  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
+  const double zeitschritt = 0.5;
+  const double simzeit = 3.0;
+
+  while (d_GlobaleZeit <= simzeit) {
+    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
+    vSetzeZeit(d_GlobaleZeit);
+
+    landstrasse.vSimulieren();
+    innerorts.vSimulieren();
+
+    Fahrzeug::vKopf();
+    for (auto &fahrzeug : landstrasse.getFahrzeuge()) {
+      //            double relPos = fahrzeug->dGetRelPosition(); //
+      //            获取车辆在路径上的相对位置 double kmh =
+      //            fahrzeug->dGeschwindigkeit(); double tank =
+      //            fahrzeug->dTankinhalt();
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    for (auto &fahrzeug : innerorts.getFahrzeuge()) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    std::cout << "==================车辆信息Finished=================="
+              << std::endl;
+
+    Weg::vKopf();
+    std::cout << landstrasse << std::endl; // 输出乡村道路上的车辆状态
+    std::cout << innerorts << std::endl;   // 输出市区道路上的车辆状态
+    std::cout << "==================================" << std::endl;
+    std::cout << "==================================" << std::endl;
+    vSleep(500);
+
+    d_GlobaleZeit += zeitschritt;
+  }
+  vBeendeGrafik();
+}
+
+void vAufgabe_6_2() {
+  // 初始化图形窗口
+  bInitialisiereGrafik(800, 500);
+
+  // 设置路径的长度
+  const double laenge = 500.0;
+
+  // 绘制往返路径
+  int koord[] = {100, 250, 700, 250}; // 线段的起点和终点坐标
+  bZeichneStrasse("Patn", "ReturnPath", laenge, 2, koord);
+  bZeichneKreuzung(200, 200);
+  // 创建车辆并设置其属性
+  std::unique_ptr<Fahrzeug> bmw = std::make_unique<Fahrzeug>("BMW", 120.0);
+  double relPosition = 0.0; // 相对位置
+  double kmH = 0.0;         // 速度
+  double tank = 50.0;       // 油箱容量
+
+  // 绘制车辆（在路径上位置为0，初始速度和油量）
+  bZeichnePKW(bmw->getName(), "Patn", relPosition, kmH, tank);
+
+  // 暂停以便查看
+  vSleep(2000); // 暂停2000毫秒
+
+  // 结束图形连接
+  vBeendeGrafik();
+}
+
 int main() {
-  vAufgabe_6();
+  vAufgabe_6_2();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }
