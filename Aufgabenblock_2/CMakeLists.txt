@@ -1,11 +1,7 @@
-cmake_minimum_required(VERSION 3.14)
+﻿cmake_minimum_required(VERSION 3.14)
 project(Block2)
 
 set(CMAKE_CXX_STANDARD 17)
-
-include_directories(${CMAKE_SOURCE_DIR}/../Auf3)
-
-file(GLOB Auf3_SRC ${CMAKE_SOURCE_DIR}/../Auf3/*.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(Block2 main.cpp
@@ -26,5 +22,4 @@ add_executable(Block2 main.cpp
         Fahren.h
         Fahren.cpp
         Parken.h
-        Parken.cpp
-        ${Auf3_SRC})
+        Parken.cpp)

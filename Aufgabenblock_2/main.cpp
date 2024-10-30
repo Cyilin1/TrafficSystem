@@ -1,5 +1,4 @@
-#include "SimuClient.h"
-#include "Simulationsobjekt.h"
+﻿#include "Simulationsobjekt.h"
 #include "Weg.h"
 #include "fahrrad.h"
 #include "pkw.h"
@@ -238,13 +237,13 @@ void vAufgabe_4() {
 void vAufgabe_5() {
   Weg weg("Landstrasse", 100.0); // 100 长度的路径 Landstrasse
 
-  std::unique_ptr<Fahrzeug> bmw = std::make_unique<Fahrzeug>("BMW", 120.0);
-  std::unique_ptr<Fahrzeug> audi = std::make_unique<Fahrzeug>("Audi", 130.0);
-  std::unique_ptr<Fahrzeug> bmx = std::make_unique<Fahrzeug>("BMX", 25.0);
+  std::unique_ptr<Fahrzeug> bmw = std::make_unique<PKW>("BMW", 120.0);
+  std::unique_ptr<Fahrzeug> audi = std::make_unique<PKW>("Audi", 130.0);
+  std::unique_ptr<Fahrzeug> bmx = std::make_unique<Fahrrad>("BMX", 25.0);
 
-  weg.vAnnahme(std::move(bmw));
+  weg.vAnnahme(std::move(bmw), 1.0);
   weg.vAnnahme(std::move(audi), 1.0);
-  weg.vAnnahme(std::move(bmx));
+  weg.vAnnahme(std::move(bmx), 1.0);
 
   std::cout << "\n模拟路径上的车辆行驶：" << std::endl;
 
@@ -321,7 +320,7 @@ void vAufgabe_6() {
 }
 
 int main() {
-  vAufgabe_6();
+  vAufgabe_5();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }
