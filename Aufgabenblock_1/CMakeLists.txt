@@ -9,4 +9,6 @@ add_executable(untitled4 main.cpp
         pkw.h
         pkw.cpp
         fahrrad.h
-        fahrrad.cpp)
+        fahrrad.cpp
+        vertagt_aktion.h
+        vertagt_liste.h)
