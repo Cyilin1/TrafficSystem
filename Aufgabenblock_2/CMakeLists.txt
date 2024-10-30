@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+﻿cmake_minimum_required(VERSION 3.14)
 project(Block2)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -12,6 +12,7 @@ file(GLOB Auf3_SRC ${CMAKE_SOURCE_DIR}/../Auf3/*.cpp)
 set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/../boost")
 set(BOOST_INCLUDEDIR "${BOOST_ROOT}/include")
 set(BOOST_LIBRARYDIR "${BOOST_ROOT}/lib")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/../boost)
 

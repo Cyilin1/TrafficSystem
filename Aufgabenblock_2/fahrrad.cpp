@@ -1,4 +1,5 @@
 ﻿#include "fahrrad.h"
+#include "Fahrzeugausnahme.h"
 #include "SimuClient.h"
 #include <iostream>
 
@@ -6,13 +7,22 @@ Fahrrad::Fahrrad(const std::string &name, double maxGeschwindigkeit)
     : Fahrzeug(name, maxGeschwindigkeit) {}
 
 void Fahrrad::vSimulieren() {
-  double zeitDifferenz = d_GlobaleZeit - p_dZeit;
+  if (!p_pVerhalten)
+    return;
+  double dZeitDelta = d_GlobaleZeit - p_dZeit;
+  if (dZeitDelta <= 0)
+    return;
 
-  if (zeitDifferenz > 0) {
-    double effektiveGeschwindigkeit = dGeschwindigkeit();
-    p_dGesamtstrecke += zeitDifferenz * effektiveGeschwindigkeit;
-    p_dGesamtZeit += zeitDifferenz;
-    p_dZeit = d_GlobaleZeit;
+  double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitDelta);
+
+  // 更新总行驶距离和总行驶时间
+  p_dGesamtstrecke += dGefahreneStrecke;
+  p_dGesamtZeit += dZeitDelta;
+  p_dZeit = d_GlobaleZeit;
+  // 检查是否需要抛出异常
+  if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
+    throw Streckenende(*this, p_pVerhalten->getWeg());
+    //  抛出到达终点异常
   }
 }
 
