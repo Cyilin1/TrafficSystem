@@ -94,11 +94,9 @@ ID | Name       | Länge  | Fahrzeuge
 
 由于目前对车辆没有任何限制，所以 `dStrecke` 函数如图 5.1 所示，应该在给定的时间段内返回可行驶的距离，只要不会超过路径长度（dT1... dTn-1）。在时间步长 dTn 内，应仅返回到路径终点的剩余距离，从而使车辆恰好到达路径的尽头。在最后一个时间步长 dTn+1 内，应识别出车辆已经到达路径的尽头。首先，程序应在此处仅输出一条相应的消息，表示车辆已到达路径的尽头。
 
-![image-20241015172425860](/Users/cyilin/Library/Application Support/typora-user-images/image-20241015172425860.png)
+![image-20241015172425860](Image/5.1.png)
 
 2. 编写一个函数 `Weg::vAnnahme(unique_ptr<Fahrzeug>)`，该函数接收一个车辆并将其添加到路径上。为此，必须将车辆记录到车辆列表中。由于 `unique_ptr` 不能被复制，因此必须使用 `move` 移动指针。为了能够看到已登记的车辆，这些车辆会以括号形式附加在路径的输出后。此外，还必须向车辆发出信号，表明它现在处于一条新的路径上。
-
-![image-20241015172029327](/Users/cyilin/Library/Application Support/typora-user-images/image-20241015172029327.png)
 
 3. 请测试您在 `vAufgabe 5()` 中的新类，通过创建一个路径和三个车辆，将这些车辆放在路径上并模拟路径。
 
@@ -239,7 +237,9 @@ b) 一个用于暂存即将执行的操作的列表 `list<unique_ptr<Aktion>> p_
 
 对于写入操作，将创建一个包含抽象父类 `VAktion` 的类层次结构，如图 5.3 所示，该类仅包含函数 `vAusfuehren()` 和一个指向要处理的列表的引用（`ppListe`）。对于每个写入功能，将派生出一个相应的子类，如 `VPushFront`、`VPushBack` 和 `VErase`。子类的构造函数将写入功能的相应参数和实际列表的引用传递过去，因为否则将无法访问列表。在子类中重写的函数 `vAusfuehren()` 将执行实际操作。
 
-`VListe` 的 `vAktualisieren()` 函数遍历待处理操作的列表，并使用 `vAusfuehren()` 方法处理每个元素。请注意，已使用的对象会从操作列表中移除。`VListe` 的工作原理在图 5.2 中以示意图形式再次展示。
+![Alt text](Image/5.3.png)`VListe` 的 `vAktualisieren()` 函数遍历待处理操作的列表，并使用 `vAusfuehren()` 方法处理每个元素。请注意，已使用的对象会从操作列表中移除。`VListe` 的工作原理在图 5.2 中以示意图形式再次展示。
+
+![Alt text](Image/5.2.png)
 
 要为延迟列表实现以下功能：
 
