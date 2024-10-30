@@ -1,4 +1,4 @@
-#ifndef WEG_H
+﻿#ifndef WEG_H
 #define WEG_H
 
 #include "Simulationsobjekt.h"
@@ -31,7 +31,7 @@ public:
   void vAnnahme(std::unique_ptr<Fahrzeug> pFzg);
   // 重载函数，接纳停放的车辆
   void vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit);
-
+  std::unique_ptr<Fahrzeug> pAbgabe(const Fahrzeug &fahrzeug);
   // 模拟方法
   virtual void vSimulieren() override;
 

@@ -27,6 +27,26 @@ void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit) {
             << " 小时\n";
 }
 
+std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
+  // 注意：it现在是指向指针的指针
+  auto it = std::find_if(
+      p_pFahrzeuge.begin(), p_pFahrzeuge.end(),
+      [&](const std::unique_ptr<Fahrzeug> &f) { return f && *f == fahrzeug; });
+
+  // 如果找到该车辆
+  if (it != p_pFahrzeuge.end()) {
+    // 将找到的车辆移到局部变量并从列表中删除
+    std::unique_ptr<Fahrzeug> abgabeFahrzeug = std::move(*it);
+    p_pFahrzeuge.erase(it); // 从列表中删除
+
+    // 返回局部存储的指针
+    return abgabeFahrzeug;
+  }
+
+  // 如果未找到，返回空指针
+  return nullptr;
+}
+
 void Weg::vSimulieren() {
   try {
     for (auto &fzg : p_pFahrzeuge) {

@@ -57,6 +57,7 @@ void PKW::vSimulieren() {
   }
 
   // 更新总行驶距离和总行驶时间
+  p_dAbschnittStrecke += dGefahreneStrecke;
   p_dGesamtstrecke += dGefahreneStrecke;
   p_dGesamtZeit += dZeitDelta;
   p_dZeit = d_GlobaleZeit;
