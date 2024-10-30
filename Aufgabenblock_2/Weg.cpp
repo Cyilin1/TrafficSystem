@@ -1,4 +1,4 @@
-#include "Weg.h"
+﻿#include "Weg.h"
 #include "Fahrzeug.h"
 #include "Fahrzeugausnahme.h"
 
@@ -31,6 +31,7 @@ void Weg::vSimulieren() {
   try {
     for (auto &fzg : p_pFahrzeuge) {
       fzg->vSimulieren();
+      fzg->vZeichnen(*this); // 绘制车辆
     }
   } catch (const Fahrzeugausnahme &ex) {
     ex.vBearbeiten(); // 调用异常的处理函数

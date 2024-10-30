@@ -418,8 +418,71 @@ void vAufgabe_6_2() {
   vBeendeGrafik();
 }
 
+void vAufgabe_6_3() {
+  // 初始化图形窗口
+  const int windowWidth = 800;
+  const int windowHeight = 500;
+  if (!bInitialisiereGrafik(windowWidth, windowHeight)) {
+    std::cerr << "图形界面初始化失败！" << std::endl;
+    return;
+  }
+
+  // 设置路径
+  Weg hin("Hin", 500.0, Tempolimit::Unlimited);
+  Weg rueck("Rueck", 500.0, Tempolimit::Unlimited);
+
+  int koordHin[] = {100, 250, 700, 250}; // 往路径坐标
+  //  int koordRueck[] = {700, 250, 100, 250}; // 返路径坐标
+  bZeichneStrasse(hin.getName(), rueck.getName(), hin.getLaenge(), 2, koordHin);
+  //  bZeichneStrasse(rueck.getName(), hin.getName(), rueck.getLaenge(), 2,
+  //                  koordRueck);
+  // 创建车辆
+  std::unique_ptr<PKW> bmw = std::make_unique<PKW>("BMW", 120.0, 50.0);
+  std::unique_ptr<Fahrrad> trek = std::make_unique<Fahrrad>("Trek", 25.0);
+  std::unique_ptr<PKW> audi = std::make_unique<PKW>("Audi", 100.0, 60.0);
+
+  // 将车辆添加到路径上
+  hin.vAnnahme(std::move(bmw));
+  hin.vAnnahme(std::move(trek), 1.0); // 将自行车设置为延迟1小时后开始
+  rueck.vAnnahme(std::move(audi));
+
+  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
+  const double zeitschritt = 0.5;
+  const double simzeit = 3.0;
+
+  while (d_GlobaleZeit <= simzeit) {
+    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
+    vSetzeZeit(d_GlobaleZeit);
+
+    hin.vSimulieren();
+    rueck.vSimulieren();
+
+    Fahrzeug::vKopf();
+    for (auto &fahrzeug : hin.getFahrzeuge()) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    for (auto &fahrzeug : rueck.getFahrzeuge()) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    std::cout << "==================车辆信息Finished=================="
+              << std::endl;
+
+    Weg::vKopf();
+    std::cout << hin << std::endl;
+    std::cout << rueck << std::endl;
+    std::cout << "==================================" << std::endl;
+    std::cout << "==================================" << std::endl;
+    d_GlobaleZeit += zeitschritt;
+    vSleep(2000); // 暂停2000毫秒
+  }
+
+  // 结束图形会话
+  vBeendeGrafik();
+}
 int main() {
-  vAufgabe_6_2();
+  vAufgabe_6_3();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }

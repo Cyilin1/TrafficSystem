@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by Cyilin on 24-10-9.
 //
 
@@ -37,6 +37,7 @@ public:
   dTanken(double dMenge = std::numeric_limits<double>::infinity()) {
     return 0.0;
   };
+  virtual void vZeichnen(const Weg &weg) const { return; };
 
   bool operator<(const Fahrzeug &other) const {
     return this->p_dGesamtstrecke < other.p_dGesamtstrecke;

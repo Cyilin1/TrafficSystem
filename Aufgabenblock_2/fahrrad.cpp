@@ -1,4 +1,5 @@
-#include "fahrrad.h"
+﻿#include "fahrrad.h"
+#include "SimuClient.h"
 #include <iostream>
 
 Fahrrad::Fahrrad(const std::string &name, double maxGeschwindigkeit)
@@ -23,6 +24,12 @@ void Fahrrad::vAusgeben() const {
 void Fahrrad::vAusgeben(std::ostream &os) const {
   Fahrzeug::vAusgeben(os);
   os << std::setw(10) << "-" << std::setw(15) << dGeschwindigkeit();
+}
+
+void Fahrrad::vZeichnen(const Weg &weg) const {
+  double relPosition = p_dGesamtstrecke / weg.getLaenge(); // 计算相对位置
+  double kmH = this->dGeschwindigkeit();                   // 获取自行车速度
+  bZeichneFahrrad(this->getName(), weg.getName(), relPosition, kmH);
 }
 
 double Fahrrad::dGeschwindigkeit() const {

@@ -1,5 +1,6 @@
-#include "pkw.h"
+﻿#include "pkw.h"
 #include "Fahrzeugausnahme.h"
+#include "SimuClient.h"
 
 PKW::PKW(const std::string &name, double maxGeschwindigkeit, double verbrauch,
          double tankvolumen)
@@ -87,6 +88,13 @@ double PKW::dTanken(double dMenge) {
 
   // 返回实际加的油量
   return tatsaechlicheMenge;
+}
+
+void PKW::vZeichnen(const Weg &weg) const {
+  double relPosition = p_dGesamtstrecke / weg.getLaenge(); // 计算相对位置
+  double kmH = this->dGeschwindigkeit();                   // 获取车辆速度
+  double tank = p_dTankinhalt;                             // 获取油箱剩余量
+  bZeichnePKW(this->getName(), weg.getName(), relPosition, kmH, tank);
 }
 
 double PKW::dGeschwindigkeit() const {
