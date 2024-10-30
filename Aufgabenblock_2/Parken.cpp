@@ -1,4 +1,4 @@
-#include "Parken.h"
+﻿#include "Parken.h"
 #include "Fahren.h"
 #include "Fahrzeug.h"
 #include "Fahrzeugausnahme.h"
@@ -15,9 +15,8 @@ double Parken::dStrecke(Fahrzeug &aFzg, double dZeitIntervall) {
               << std::endl;
     bGestartet = true;
     aFzg.setZeit(d_GlobaleZeit);
-    aFzg.vLosfahren();
+    throw Losfahren(aFzg, Verhalten::getWeg());
   }
 
-  //  throw Losfahren(aFzg, Verhalten::getWeg());
   return Verhalten::dStrecke(aFzg, dZeitIntervall);
 }

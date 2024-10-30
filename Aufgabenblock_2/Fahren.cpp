@@ -1,17 +1,20 @@
-#include "Fahren.h"
+﻿#include "Fahren.h"
 #include "Fahrzeug.h"
+#include "Fahrzeugausnahme.h"
 
 double Fahren::dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall) {
   double dMaxSpeed = fahrzeug.dGeschwindigkeit();
 
   double dMoeglicheStrecke = dMaxSpeed * dZeitIntervall;
+  if (fahrzeug.getAbschnittStrecke() + dMoeglicheStrecke >=
+      p_rWeg.getLaenge()) {
+    dMoeglicheStrecke = p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke();
+    throw Streckenende(fahrzeug, p_rWeg);
+  }
 
-  double dReststrecke = p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke();
-  // 实际行驶的距离为最小值（即不会超过剩余路径长度）
-  p_dLetzteBerechneteStrecke = std::min(dMoeglicheStrecke, dReststrecke);
-  double dCanRunDis = p_rWeg.getLaenge() - fahrzeug.dGesamtstrecke() -
-                      p_dLetzteBerechneteStrecke;
+  double dCanRunDis =
+      p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke() - dMoeglicheStrecke;
   std::cout << fahrzeug.getName() << " 还可行驶的距离为" << dCanRunDis
             << std::endl;
-  return p_dLetzteBerechneteStrecke;
+  return dMoeglicheStrecke;
 }

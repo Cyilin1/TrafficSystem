@@ -37,7 +37,7 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
   if (it != p_pFahrzeuge.end()) {
     // 将找到的车辆移到局部变量并从列表中删除
     std::unique_ptr<Fahrzeug> abgabeFahrzeug = std::move(*it);
-    p_pFahrzeuge.erase(it); // 从列表中删除
+    //    p_pFahrzeuge.erase(it); // 从列表中删除
 
     // 返回局部存储的指针
     return abgabeFahrzeug;
@@ -48,13 +48,24 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
 }
 
 void Weg::vSimulieren() {
-  try {
-    for (auto &fzg : p_pFahrzeuge) {
-      fzg->vSimulieren();
-      fzg->vZeichnen(*this); // 绘制车辆
+  //  for (const auto &fzg : p_pFahrzeuge) {
+  //    try {
+  //      fzg->vSimulieren();
+  //      fzg->vZeichnen(*this); // 绘制车辆
+  //    } catch (const Fahrzeugausnahme &ex) {
+  //      ex.vBearbeiten();       // 调用异常的处理函数
+  //      p_pFahrzeuge.erase(it); // 从列表中删除
+  //    }
+  //  }
+  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end();) {
+    try {
+      (*it)->vSimulieren();
+      (*it)->vZeichnen(*this);
+      ++it; // 手动增量，以避免在添加或删除元素时失效
+    } catch (const Fahrzeugausnahme &ex) {
+      ex.vBearbeiten();
+      it = p_pFahrzeuge.erase(it); // 在发生异常时从列表中删除对象，并更新迭代器
     }
-  } catch (const Fahrzeugausnahme &ex) {
-    ex.vBearbeiten(); // 调用异常的处理函数
   }
 }
 

@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by Cyilin on 24-10-9.
 //
 
@@ -56,11 +56,11 @@ void Fahrzeug::vSimulieren() {
     p_dGesamtZeit += dZeitDelta;
     p_dZeit = d_GlobaleZeit;
 
-    // 检查是否需要抛出异常
-    if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
-      throw Streckenende(*this, p_pVerhalten->getWeg());
-      //  抛出到达终点异常
-    }
+    //    // 检查是否需要抛出异常
+    //    if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
+    //      throw Streckenende(*this, p_pVerhalten->getWeg());
+    //      //  抛出到达终点异常
+    //    }
   }
 }
 

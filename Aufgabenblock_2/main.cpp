@@ -428,8 +428,8 @@ void vAufgabe_6_3() {
   }
 
   // 设置路径
-  Weg hin("Hin", 500.0, Tempolimit::Unlimited);
-  Weg rueck("Rueck", 500.0, Tempolimit::Unlimited);
+  Weg hin("Hin", 100.0, Tempolimit::Unlimited);
+  Weg rueck("Rueck", 100.0, Tempolimit::Unlimited);
 
   int koordHin[] = {100, 250, 700, 250}; // 往路径坐标
   //  int koordRueck[] = {700, 250, 100, 250}; // 返路径坐标
@@ -437,9 +437,9 @@ void vAufgabe_6_3() {
   //  bZeichneStrasse(rueck.getName(), hin.getName(), rueck.getLaenge(), 2,
   //                  koordRueck);
   // 创建车辆
-  std::unique_ptr<PKW> bmw = std::make_unique<PKW>("BMW", 120.0, 50.0);
+  std::unique_ptr<PKW> bmw = std::make_unique<PKW>("BMW", 120.0, 1, 50.0);
   std::unique_ptr<Fahrrad> trek = std::make_unique<Fahrrad>("Trek", 25.0);
-  std::unique_ptr<PKW> audi = std::make_unique<PKW>("Audi", 100.0, 60.0);
+  std::unique_ptr<PKW> audi = std::make_unique<PKW>("Audi", 100.0, 1, 60.0);
 
   // 将车辆添加到路径上
   hin.vAnnahme(std::move(bmw));
@@ -448,7 +448,7 @@ void vAufgabe_6_3() {
 
   // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
   const double zeitschritt = 0.5;
-  const double simzeit = 3.0;
+  const double simzeit = 7;
 
   while (d_GlobaleZeit <= simzeit) {
     std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
@@ -475,7 +475,7 @@ void vAufgabe_6_3() {
     std::cout << "==================================" << std::endl;
     std::cout << "==================================" << std::endl;
     d_GlobaleZeit += zeitschritt;
-    vSleep(2000); // 暂停2000毫秒
+    vSleep(1000); // 暂停2000毫秒
   }
 
   // 结束图形会话

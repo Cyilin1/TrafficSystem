@@ -16,14 +16,15 @@ void Fahrrad::vSimulieren() {
   double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitDelta);
 
   // 更新总行驶距离和总行驶时间
+  p_dAbschnittStrecke += dGefahreneStrecke;
   p_dGesamtstrecke += dGefahreneStrecke;
   p_dGesamtZeit += dZeitDelta;
   p_dZeit = d_GlobaleZeit;
-  // 检查是否需要抛出异常
-  if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
-    throw Streckenende(*this, p_pVerhalten->getWeg());
-    //  抛出到达终点异常
-  }
+  //  // 检查是否需要抛出异常
+  //  if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
+  //    throw Streckenende(*this, p_pVerhalten->getWeg());
+  //    //  抛出到达终点异常
+  //  }
 }
 
 void Fahrrad::vAusgeben() const {
