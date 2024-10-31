@@ -11,18 +11,20 @@ Weg::Weg(const std::string &name, double laenge, Tempolimit tempolimit)
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
   // 使用 move 将车辆移动到车辆列表
+  pFzg->vNeueStrecke(*this);
   p_pFahrzeuge.push_back(std::move(pFzg));
-
+  //  p_pFahrzeuge.vAktualisieren();
   // 获取最后添加的车辆，通知它新的路径
-  p_pFahrzeuge.back()->vNeueStrecke(*this);
-  std::cout << "Fahrzeug " << p_pFahrzeuge.back()->getName() << " 被添加到路径 "
-            << p_sName << " 上。\n";
+  //  auto lastElement = std::prev(p_pFahrzeuge.end());
+  //  std::cout << "Fahrzeug " << (*lastElement)->getName() << " 被添加到路径 "
+  //            << p_sName << " 上。\n";
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit) {
   pFahrzeug->vNeueStrecke(*this, dStartzeit);    // 设置停放行为
   p_pFahrzeuge.push_front(std::move(pFahrzeug)); // 添加到列表前端
-  std::cout << "Fahrzeug " << p_pFahrzeuge.front()->getName()
+  p_pFahrzeuge.vAktualisieren();
+  std::cout << "Fahrzeug " << (*p_pFahrzeuge.begin())->getName()
             << " 被添加到路径 " << p_sName << " 上， 停放时间为 " << dStartzeit
             << " 小时\n";
 }
@@ -37,7 +39,7 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
   if (it != p_pFahrzeuge.end()) {
     // 将找到的车辆移到局部变量并从列表中删除
     std::unique_ptr<Fahrzeug> abgabeFahrzeug = std::move(*it);
-    //    p_pFahrzeuge.erase(it); // 从列表中删除
+    p_pFahrzeuge.erase(it); // 从列表中删除
 
     // 返回局部存储的指针
     return abgabeFahrzeug;
@@ -48,25 +50,28 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
 }
 
 void Weg::vSimulieren() {
-  //  for (const auto &fzg : p_pFahrzeuge) {
-  //    try {
-  //      fzg->vSimulieren();
-  //      fzg->vZeichnen(*this); // 绘制车辆
-  //    } catch (const Fahrzeugausnahme &ex) {
-  //      ex.vBearbeiten();       // 调用异常的处理函数
-  //      p_pFahrzeuge.erase(it); // 从列表中删除
-  //    }
-  //  }
-  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end();) {
+  p_pFahrzeuge.vAktualisieren();
+  for (const auto &fzg : p_pFahrzeuge) {
     try {
-      (*it)->vSimulieren();
-      (*it)->vZeichnen(*this);
-      ++it; // 手动增量，以避免在添加或删除元素时失效
+      fzg->vSimulieren();
+      fzg->vZeichnen(*this); // 绘制车辆
     } catch (const Fahrzeugausnahme &ex) {
-      ex.vBearbeiten();
-      it = p_pFahrzeuge.erase(it); // 在发生异常时从列表中删除对象，并更新迭代器
+      ex.vBearbeiten(); // 调用异常的处理函数
     }
   }
+  p_pFahrzeuge.vAktualisieren();
+
+  //  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end();) {
+  //    try {
+  //      (*it)->vSimulieren();
+  //      (*it)->vZeichnen(*this);
+  //      ++it; // 手动增量，以避免在添加或删除元素时失效
+  //    } catch (const Fahrzeugausnahme &ex) {
+  //      ex.vBearbeiten();
+  //      it = p_pFahrzeuge.erase(it); //
+  //      在发生异常时从列表中删除对象，并更新迭代器
+  //    }
+  //  }
 }
 
 void Weg::vAusgeben(std::ostream &os) const {

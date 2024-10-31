@@ -66,7 +66,9 @@ void Fahrzeug::vSimulieren() {
 
 void Fahrzeug::vNeueStrecke(Weg &weg) {
   p_pVerhalten = std::make_unique<Fahren>(weg); // 设置为行驶行为
-  p_dAbschnittStrecke = 0.0;                    // 重置当前路径的行驶距离
+  std::cout << "Fahrzeug " << getName() << " 被添加到路径 " << weg.getName()
+            << " 上。\n";
+  p_dAbschnittStrecke = 0.0; // 重置当前路径的行驶距离
 }
 
 void Fahrzeug::vNeueStrecke(Weg &weg, double dStartzeit) {

@@ -2,6 +2,7 @@
 #define WEG_H
 
 #include "Simulationsobjekt.h"
+#include "vertagt_liste.h"
 #include <iostream>
 #include <limits> // For std::numeric_limits
 #include <list>
@@ -17,9 +18,10 @@ enum class Tempolimit {
 
 class Weg : public Simulationsobjekt {
 private:
-  double p_dLaenge;                                  // 路径长度
-  Tempolimit p_eTempolimit;                          // 速度限制
-  std::list<std::unique_ptr<Fahrzeug>> p_pFahrzeuge; // 车辆列表
+  double p_dLaenge;         // 路径长度
+  Tempolimit p_eTempolimit; // 速度限制
+  vertagt::VListe<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
+  //  std::list<std::unique_ptr<Fahrzeug>> p_pFahrzeuge; // 车辆列表
 
 public:
   Weg();
@@ -46,7 +48,7 @@ public:
 
   double dGetTempolimit() const;
 
-  const std::list<std::unique_ptr<Fahrzeug>> &getFahrzeuge() const {
+  const vertagt::VListe<std::unique_ptr<Fahrzeug>> &getFahrzeuge() const {
     return p_pFahrzeuge;
   }
 };

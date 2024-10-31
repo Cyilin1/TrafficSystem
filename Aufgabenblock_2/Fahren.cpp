@@ -9,7 +9,7 @@ double Fahren::dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall) {
   if (fahrzeug.getAbschnittStrecke() + dMoeglicheStrecke >=
       p_rWeg.getLaenge()) {
     dMoeglicheStrecke = p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke();
-    throw Streckenende(fahrzeug, p_rWeg);
+    //    throw Streckenende(fahrzeug, p_rWeg);
   }
 
   double dCanRunDis =

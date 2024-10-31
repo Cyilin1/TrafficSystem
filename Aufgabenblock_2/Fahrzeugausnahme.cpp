@@ -19,7 +19,6 @@ void Losfahren::vBearbeiten() const {
 
 void Streckenende::vBearbeiten() const {
   std::unique_ptr<Fahrzeug> removedVehicle = p_Weg.pAbgabe(p_Fahrzeug);
-
   if (!removedVehicle) {
     std::cerr << "错误：无法删除车辆 " << p_Fahrzeug.getName() << "。"
               << std::endl;
@@ -28,4 +27,5 @@ void Streckenende::vBearbeiten() const {
               << p_Weg.getName() << " 的终点，已将其移出行驶列表。"
               << std::endl;
   }
+  removedVehicle->vZeichnen(p_Weg); // 绘制车辆
 }

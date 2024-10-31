@@ -43,4 +43,6 @@ add_executable(Block2 main.cpp
         Fahren.cpp
         Parken.h
         Parken.cpp
+        vertagt_aktion.h
+        vertagt_liste.h
         ${Auf3_SRC})

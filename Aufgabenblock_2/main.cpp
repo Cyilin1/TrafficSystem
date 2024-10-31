@@ -3,7 +3,9 @@
 #include "Weg.h"
 #include "fahrrad.h"
 #include "pkw.h"
+#include "vertagt_liste.h"
 #include <iostream>
+#include <random>
 #include <string>
 #include <vector>
 
@@ -480,6 +482,73 @@ void vAufgabe_6_3() {
 
   // 结束图形会话
   vBeendeGrafik();
+}
+
+void vAufgabe_6a() {
+  // 初始化随机数生成器
+  static std::mt19937 device(0); // 固定种子以获得可复现的结果
+  std::uniform_int_distribution<int> dist(1, 10);
+
+  // 创建一个延迟列表
+  vertagt::VListe<int> liste;
+
+  // 填充列表，生成 10 个随机整数
+  for (int i = 0; i < 10; ++i) {
+    int zuf = dist(device);
+    liste.push_back(zuf);
+  }
+  liste.vAktualisieren();
+
+  // 输出列表
+  std::cout << "Initial list: ";
+  for (const auto &item : liste) {
+    std::cout << item << " ";
+  }
+  std::cout << std::endl;
+
+  // 删除所有大于 5 的元素
+  for (auto it = liste.begin(); it != liste.end(); it++) {
+    if (*it > 5) {
+      liste.erase(it);
+    }
+  }
+
+  // 输出列表（更新尚未执行，输出应相同）
+  std::cout << "List after deletion (before update): ";
+  for (const auto &item : liste) {
+    std::cout << item << " ";
+  }
+  std::cout << std::endl;
+
+  // 调用 vAktualisieren() 来更新列表
+  liste.vAktualisieren();
+
+  // 输出列表（此时列表应已更改）
+  std::cout << "List after update: ";
+  for (const auto &item : liste) {
+    std::cout << item << " ";
+  }
+  std::cout << std::endl;
+
+  // 在列表开头和末尾插入两个随机值
+  liste.push_front(dist(device)); // 随机值插入开头
+  liste.push_back(dist(device));  // 随机值插入末尾
+
+  // 再次输出列表进行检查
+  std::cout << "Final list after inserting two random values: ";
+  for (const auto &item : liste) {
+    std::cout << item << " ";
+  }
+  std::cout << std::endl;
+  // 调用 vAktualisieren() 来更新列表
+  liste.vAktualisieren();
+
+  // 输出列表（此时列表应已更改）
+  std::cout << "List after update: ";
+  for (const auto &item : liste) {
+    std::cout << item << " ";
+  }
+  std::cout << std::endl;
 }
 
 int main() {
