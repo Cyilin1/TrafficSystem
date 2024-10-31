@@ -1,3 +1,0 @@
-/Users/caiyilin/Desktop/working/RWTH/2024New/RWTH2024/build-Aufgabenblock_1-Qt_6_5_2_for_macOS-Debug/CMakeFiles/untitled4.dir
-/Users/caiyilin/Desktop/working/RWTH/2024New/RWTH2024/build-Aufgabenblock_1-Qt_6_5_2_for_macOS-Debug/CMakeFiles/edit_cache.dir
-/Users/caiyilin/Desktop/working/RWTH/2024New/RWTH2024/build-Aufgabenblock_1-Qt_6_5_2_for_macOS-Debug/CMakeFiles/rebuild_cache.dir

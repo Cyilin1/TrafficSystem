@@ -1,0 +1,6 @@
+.ninja_deps
+.ninja_log
+.cmake/api/v1
+build*/
+.project
+.cproject
