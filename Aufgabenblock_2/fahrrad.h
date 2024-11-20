@@ -3,7 +3,7 @@
 
 #include "Fahrzeug.h"
 
-class Fahrrad : public Fahrzeug {
+class Fahrrad : public Vehicle {
 public:
   Fahrrad(const std::string &name = "", double maxGeschwindigkeit = 0.0);
 

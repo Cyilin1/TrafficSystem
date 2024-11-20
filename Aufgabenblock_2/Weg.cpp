@@ -9,40 +9,40 @@ Weg::Weg()
 Weg::Weg(const std::string &name, double laenge, Tempolimit tempolimit)
     : Simulationsobjekt(name), p_dLaenge(laenge), p_eTempolimit(tempolimit) {}
 
-void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
+void Weg::vAnnahme(std::unique_ptr<Vehicle> pFzg) {
   // 使用 move 将车辆移动到车辆列表
   pFzg->vNeueStrecke(*this);
-  p_pFahrzeuge.push_back(std::move(pFzg));
-  //  p_pFahrzeuge.vAktualisieren();
+  m_vehicleList.push_back(std::move(pFzg));
+  //  m_vehicleList.vAktualisieren();
   // 获取最后添加的车辆，通知它新的路径
-  //  auto lastElement = std::prev(p_pFahrzeuge.end());
-  //  std::cout << "Fahrzeug " << (*lastElement)->getName() << " 被添加到路径 "
+  //  auto lastElement = std::prev(m_vehicleList.end());
+  //  std::cout << "Vehicle " << (*lastElement)->getName() << " 被添加到路径 "
   //            << p_sName << " 上。\n";
 }
 
-void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit) {
-  pFahrzeug->vNeueStrecke(*this, dStartzeit);    // 设置停放行为
-  p_pFahrzeuge.push_front(std::move(pFahrzeug)); // 添加到列表前端
-  p_pFahrzeuge.applyActionToList();
-  std::cout << "Fahrzeug " << (*p_pFahrzeuge.begin())->getName()
+void Weg::vAnnahme(std::unique_ptr<Vehicle> pVehicle, double dStartzeit) {
+  pVehicle->vNeueStrecke(*this, dStartzeit);     // 设置停放行为
+  m_vehicleList.push_front(std::move(pVehicle)); // 添加到列表前端
+  m_vehicleList.applyActionToList();
+  std::cout << "Vehicle " << (*m_vehicleList.begin())->getName()
             << " 被添加到路径 " << p_sName << " 上， 停放时间为 " << dStartzeit
             << " 小时\n";
 }
 
-std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
+std::unique_ptr<Vehicle> Weg::pAbgabe(const Vehicle &Fahrzeug) {
   // 注意：it现在是指向指针的指针
   auto it = std::find_if(
-      p_pFahrzeuge.begin(), p_pFahrzeuge.end(),
-      [&](const std::unique_ptr<Fahrzeug> &f) { return f && *f == fahrzeug; });
+      m_vehicleList.begin(), m_vehicleList.end(),
+      [&](const std::unique_ptr<Vehicle> &f) { return f && *f == Fahrzeug; });
 
   // 如果找到该车辆
-  if (it != p_pFahrzeuge.end()) {
+  if (it != m_vehicleList.end()) {
     // 将找到的车辆移到局部变量并从列表中删除
-    std::unique_ptr<Fahrzeug> abgabeFahrzeug = std::move(*it);
-    p_pFahrzeuge.erase(it); // 从列表中删除
+    std::unique_ptr<Vehicle> abgabeVehicle = std::move(*it);
+    m_vehicleList.erase(it); // 从列表中删除
 
     // 返回局部存储的指针
-    return abgabeFahrzeug;
+    return abgabeVehicle;
   }
 
   // 如果未找到，返回空指针
@@ -50,8 +50,8 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
 }
 
 void Weg::vSimulieren() {
-  p_pFahrzeuge.applyActionToList();
-  for (const auto &fzg : p_pFahrzeuge) {
+  m_vehicleList.applyActionToList();
+  for (const auto &fzg : m_vehicleList) {
     try {
       fzg->vSimulieren();
       fzg->vZeichnen(*this); // 绘制车辆
@@ -59,16 +59,16 @@ void Weg::vSimulieren() {
       ex.vBearbeiten(); // 调用异常的处理函数
     }
   }
-  p_pFahrzeuge.applyActionToList();
+  m_vehicleList.applyActionToList();
 
-  //  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end();) {
+  //  for (auto it = m_vehicleList.begin(); it != m_vehicleList.end();) {
   //    try {
   //      (*it)->vSimulieren();
   //      (*it)->vZeichnen(*this);
   //      ++it; // 手动增量，以避免在添加或删除元素时失效
-  //    } catch (const Fahrzeugausnahme &ex) {
+  //    } catch (const Vehicleausnahme &ex) {
   //      ex.vBearbeiten();
-  //      it = p_pFahrzeuge.erase(it); //
+  //      it = m_vehicleList.erase(it); //
   //      在发生异常时从列表中删除对象，并更新迭代器
   //    }
   //  }
@@ -81,8 +81,8 @@ void Weg::vAusgeben(std::ostream &os) const {
   os << std::setw(10) << p_dLaenge << " | ";
   // 输出车辆列表
   os << "(";
-  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
-    if (it != p_pFahrzeuge.begin()) {
+  for (auto it = m_vehicleList.begin(); it != m_vehicleList.end(); ++it) {
+    if (it != m_vehicleList.begin()) {
       os << ", ";
     }
     os << (*it)->getName();
@@ -97,8 +97,8 @@ void Weg::vAusgeben() const {
   std::cout << std::setw(10) << p_dLaenge << " : ";
 
   std::cout << "(";
-  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
-    if (it != p_pFahrzeuge.begin()) {
+  for (auto it = m_vehicleList.begin(); it != m_vehicleList.end(); ++it) {
+    if (it != m_vehicleList.begin()) {
       std::cout << ", ";
     }
     std::cout << (*it)->getName();
@@ -123,8 +123,8 @@ void Weg::vKopf() {
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
   std::cout << std::setw(5) << "ID" << " | " << std::setw(15) << "Name" << " | "
-            << std::setw(10) << "Length" << " | " << std::setw(10)
-            << "Fahrzeuge" << std::endl;
+            << std::setw(10) << "Length" << " | " << std::setw(10) << "Vehiclee"
+            << std::endl;
   std::cout << "-------------------------------------------------------"
             << std::endl;
 }

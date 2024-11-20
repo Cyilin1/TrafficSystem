@@ -1,11 +1,11 @@
 ﻿#include "Fahrzeugausnahme.h"
 #include "Fahrzeug.h"
 
-Fahrzeugausnahme::Fahrzeugausnahme(Fahrzeug &fzg, Weg &weg)
+Fahrzeugausnahme::Fahrzeugausnahme(Vehicle &fzg, Weg &weg)
     : p_Fahrzeug(fzg), p_Weg(weg) {}
 
 void Losfahren::vBearbeiten() const {
-  std::unique_ptr<Fahrzeug> fahrzeug = p_Weg.pAbgabe(p_Fahrzeug);
+  std::unique_ptr<Vehicle> fahrzeug = p_Weg.pAbgabe(p_Fahrzeug);
   if (fahrzeug) {
     // 重新将该车辆添加为行驶车辆
     std::cout << "Warning ：车辆 " << p_Fahrzeug.getName() << " 在路径 "
@@ -18,7 +18,7 @@ void Losfahren::vBearbeiten() const {
 }
 
 void Streckenende::vBearbeiten() const {
-  std::unique_ptr<Fahrzeug> removedVehicle = p_Weg.pAbgabe(p_Fahrzeug);
+  std::unique_ptr<Vehicle> removedVehicle = p_Weg.pAbgabe(p_Fahrzeug);
   if (!removedVehicle) {
     std::cerr << "错误：无法删除车辆 " << p_Fahrzeug.getName() << "。"
               << std::endl;

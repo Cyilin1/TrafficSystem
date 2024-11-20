@@ -8,7 +8,7 @@
 #include <list>
 #include <memory> // For smart pointers
 
-class Fahrzeug;
+class Vehicle;
 
 enum class Tempolimit {
   Unlimited,   // 无速度限制
@@ -20,8 +20,8 @@ class Weg : public Simulationsobjekt {
 private:
   double p_dLaenge;         // 路径长度
   Tempolimit p_eTempolimit; // 速度限制
-  deferred::DeferredList<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
-  //  std::list<std::unique_ptr<Fahrzeug>> p_pFahrzeuge; // 车辆列表
+  deferred::DeferredList<std::unique_ptr<Vehicle>> m_vehicleList;
+  //  std::list<std::unique_ptr<Vehicle>> p_pVehiclee; // 车辆列表
 
 public:
   Weg();
@@ -30,10 +30,10 @@ public:
   Weg(const std::string &name, double laenge,
       Tempolimit tempolimit = Tempolimit::Unlimited);
 
-  void vAnnahme(std::unique_ptr<Fahrzeug> pFzg);
+  void vAnnahme(std::unique_ptr<Vehicle> pFzg);
   // 重载函数，接纳停放的车辆
-  void vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit);
-  std::unique_ptr<Fahrzeug> pAbgabe(const Fahrzeug &fahrzeug);
+  void vAnnahme(std::unique_ptr<Vehicle> pVehicle, double dStartzeit);
+  std::unique_ptr<Vehicle> pAbgabe(const Vehicle &Vehicle);
   // 模拟方法
   virtual void vSimulieren() override;
 
@@ -48,9 +48,8 @@ public:
 
   double dGetTempolimit() const;
 
-  const deferred::DeferredList<std::unique_ptr<Fahrzeug>> &
-  getFahrzeuge() const {
-    return p_pFahrzeuge;
+  const deferred::DeferredList<std::unique_ptr<Vehicle>> &getFahrzeuge() const {
+    return m_vehicleList;
   }
 };
 

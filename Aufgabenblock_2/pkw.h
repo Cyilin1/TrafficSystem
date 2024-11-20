@@ -3,7 +3,7 @@
 
 #include "Fahrzeug.h"
 
-class PKW : public Fahrzeug {
+class PKW : public Vehicle {
 public:
   PKW(const std::string &name = "", double maxGeschwindigkeit = 0.0,
       double verbrauch = 0.0, double tankvolumen = 50.0);

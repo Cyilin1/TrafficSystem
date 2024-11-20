@@ -1,4 +1,4 @@
-#ifndef VERHALTEN_H
+﻿#ifndef VERHALTEN_H
 #define VERHALTEN_H
 
 #include "Weg.h"
@@ -13,7 +13,7 @@
 //   virtual ~Verhalten() = default;
 
 //  // 计算在给定时间间隔内的行驶距离
-//  double dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall);
+//  double dStrecke(Vehicle &Vehicle, double dZeitIntervall);
 
 //  // 获取路径的引用
 //  const Weg &getWeg() const { return p_rWeg; }
@@ -25,7 +25,7 @@ public:
   virtual ~Verhalten() {};
 
   // 纯虚函数，子类必须实现
-  virtual double dStrecke(Fahrzeug &aFzg, double dZeitIntervall) = 0;
+  virtual double dStrecke(Vehicle &aFzg, double dZeitIntervall) = 0;
   // 获取路径的引用
   Weg &getWeg() const { return p_rWeg; }
 

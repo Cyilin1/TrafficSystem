@@ -2,7 +2,7 @@
 #include "Fahrzeug.h"
 #include "Fahrzeugausnahme.h"
 
-double Fahren::dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall) {
+double Fahren::dStrecke(Vehicle &fahrzeug, double dZeitIntervall) {
   double dMaxSpeed = fahrzeug.dGeschwindigkeit();
 
   double dMoeglicheStrecke = dMaxSpeed * dZeitIntervall;

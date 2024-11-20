@@ -5,30 +5,30 @@
 #include <iostream>
 #include <string>
 
-class Fahrzeug;
+class Vehicle;
 class Weg;
 
 class Fahrzeugausnahme : public std::exception {
 protected:
-  Fahrzeug &p_Fahrzeug;
+  Vehicle &p_Fahrzeug;
   Weg &p_Weg;
 
 public:
-  Fahrzeugausnahme(Fahrzeug &fzg, Weg &weg);
+  Fahrzeugausnahme(Vehicle &fzg, Weg &weg);
 
   virtual void vBearbeiten() const = 0;
 };
 
 class Losfahren : public Fahrzeugausnahme {
 public:
-  Losfahren(Fahrzeug &fzg, Weg &weg) : Fahrzeugausnahme(fzg, weg) {}
+  Losfahren(Vehicle &fzg, Weg &weg) : Fahrzeugausnahme(fzg, weg) {}
 
   void vBearbeiten() const override;
 };
 
 class Streckenende : public Fahrzeugausnahme {
 public:
-  Streckenende(Fahrzeug &fzg, Weg &weg) : Fahrzeugausnahme(fzg, weg) {}
+  Streckenende(Vehicle &fzg, Weg &weg) : Fahrzeugausnahme(fzg, weg) {}
 
   void vBearbeiten() const override;
 };

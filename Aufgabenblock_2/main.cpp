@@ -15,8 +15,8 @@ const double refuelInterval = 3.0;
 
 int Simulationsobjekt::p_iMaxID = 0;
 
-std::ostream &operator<<(std::ostream &os, const Fahrzeug &fahrzeug) {
-  fahrzeug.vAusgeben(os);
+std::ostream &operator<<(std::ostream &os, const Vehicle &Vehicle) {
+  Vehicle.vAusgeben(os);
   return os;
 }
 
@@ -27,11 +27,11 @@ std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug) {
 
 void vAufgabe_1_1() {
   // 创建一些 Fahrzeug 对象
-  Fahrzeug fahrzeug1("PKW1", 40.00);
-  Fahrzeug fahrzeug2("AUTO3", 30.00);
+  Vehicle fahrzeug1("PKW1", 40.00);
+  Vehicle fahrzeug2("AUTO3", 30.00);
 
   // 输出表头
-  Fahrzeug::vKopf();
+  Vehicle::vKopf();
 
   // 输出车辆数据
   fahrzeug1.vAusgeben();
@@ -61,14 +61,14 @@ void vAufgabe_1_1() {
 }
 
 void vAufgabe_1a0() {
-  std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
+  std::vector<std::unique_ptr<Vehicle>> fahrzeuge;
 
-  fahrzeuge.push_back(std::make_unique<Fahrzeug>("Benz", 100));
-  fahrzeuge.push_back(std::make_unique<Fahrzeug>("BMW", 80));
-  fahrzeuge.push_back(std::make_unique<Fahrzeug>("Audi", 60));
+  fahrzeuge.push_back(std::make_unique<Vehicle>("Benz", 100));
+  fahrzeuge.push_back(std::make_unique<Vehicle>("BMW", 80));
+  fahrzeuge.push_back(std::make_unique<Vehicle>("Audi", 60));
 
   // 输出表头
-  Fahrzeug::vKopf();
+  Vehicle::vKopf();
 
   // 模拟一段时间，假设总模拟时间为10小时，每次递增0.5小时
   const double zeitschritt = 0.5; // 每次增加0.5小时
@@ -103,7 +103,7 @@ void vAufgabe_2() {
   std::cout << "请输入要生成的自行车数量: ";
   std::cin >> fahrradCount;
 
-  std::vector<std::unique_ptr<Fahrzeug>> fahrzeuge;
+  std::vector<std::unique_ptr<Vehicle>> fahrzeuge;
 
   for (int i = 0; i < pkwCount; ++i) {
     std::string name;
@@ -137,7 +137,7 @@ void vAufgabe_2() {
   }
 
   std::cout << "\n已生成的车辆信息:\n";
-  Fahrzeug::vKopf();
+  Vehicle::vKopf();
   for (const auto &fahrzeug : fahrzeuge) {
     //    fahrzeug->vAusgeben();
     //    std::cout << std::endl;
@@ -159,7 +159,7 @@ void vAufgabe_2() {
     }
 
     // 输出车辆的当前状态
-    Fahrzeug::vKopf();
+    Vehicle::vKopf();
     for (auto &fahrzeug : fahrzeuge) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -196,18 +196,18 @@ void vAufgabe_2() {
 }
 
 void vAufgabe_3() {
-  Fahrzeug fz1("Auto 1", 120.0);
-  Fahrzeug fz2("Auto 2", 150.0);
+  Vehicle fz1("Auto 1", 120.0);
+  Vehicle fz2("Auto 2", 150.0);
 
   std::cout << "初始状态:" << std::endl;
-  Fahrzeug::vKopf();
+  Vehicle::vKopf();
   std::cout << fz1 << std::endl;
   std::cout << fz2 << std::endl;
 
   fz1 = fz2; // 将 fz2 赋值给 fz1
 
   std::cout << "\n赋值后的状态:" << std::endl;
-  Fahrzeug::vKopf();
+  Vehicle::vKopf();
   std::cout << fz1 << std::endl;
   std::cout << fz2 << std::endl;
 
@@ -219,7 +219,7 @@ void vAufgabe_3() {
     fz1.vSimulieren();
     fz2.vSimulieren();
 
-    Fahrzeug::vKopf();
+    Vehicle::vKopf();
     std::cout << fz1 << std::endl;
     std::cout << fz2 << std::endl;
 
@@ -240,9 +240,9 @@ void vAufgabe_4() {
 void vAufgabe_5() {
   Weg weg("Landstrasse", 100.0); // 100 长度的路径 Landstrasse
 
-  std::unique_ptr<Fahrzeug> bmw = std::make_unique<PKW>("BMW", 120.0);
-  std::unique_ptr<Fahrzeug> audi = std::make_unique<PKW>("Audi", 130.0);
-  std::unique_ptr<Fahrzeug> bmx = std::make_unique<Fahrrad>("BMX", 25.0);
+  std::unique_ptr<Vehicle> bmw = std::make_unique<PKW>("BMW", 120.0);
+  std::unique_ptr<Vehicle> audi = std::make_unique<PKW>("Audi", 130.0);
+  std::unique_ptr<Vehicle> bmx = std::make_unique<Fahrrad>("BMX", 25.0);
 
   weg.vAnnahme(std::move(bmw), 1.0);
   weg.vAnnahme(std::move(audi), 1.0);
@@ -263,7 +263,7 @@ void vAufgabe_5() {
     Weg::vKopf();
     std::cout << weg << std::endl; // 输出每一步仿真后的路径状态
     // 输出车辆的当前状态
-    Fahrzeug::vKopf();
+    Vehicle::vKopf();
     for (auto &fahrzeug : weg.getFahrzeuge()) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -311,7 +311,7 @@ void vAufgabe_6() {
     landstrasse.vSimulieren();
     innerorts.vSimulieren();
 
-    Fahrzeug::vKopf();
+    Vehicle::vKopf();
     for (auto &fahrzeug : landstrasse.getFahrzeuge()) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -365,7 +365,7 @@ void vAufgabe_6_1() {
     landstrasse.vSimulieren();
     innerorts.vSimulieren();
 
-    Fahrzeug::vKopf();
+    Vehicle::vKopf();
     for (auto &fahrzeug : landstrasse.getFahrzeuge()) {
       //            double relPos = fahrzeug->dGetRelPosition(); //
       //            获取车辆在路径上的相对位置 double kmh =
@@ -405,7 +405,7 @@ void vAufgabe_6_2() {
   bZeichneStrasse("Patn", "ReturnPath", laenge, 2, koord);
   bZeichneKreuzung(200, 200);
   // 创建车辆并设置其属性
-  std::unique_ptr<Fahrzeug> bmw = std::make_unique<Fahrzeug>("BMW", 120.0);
+  std::unique_ptr<Vehicle> bmw = std::make_unique<Vehicle>("BMW", 120.0);
   double relPosition = 0.0; // 相对位置
   double kmH = 0.0;         // 速度
   double tank = 50.0;       // 油箱容量
@@ -459,7 +459,7 @@ void vAufgabe_6_3() {
     hin.vSimulieren();
     rueck.vSimulieren();
 
-    Fahrzeug::vKopf();
+    Vehicle::vKopf();
     for (auto &fahrzeug : hin.getFahrzeuge()) {
       std::cout << *fahrzeug;
       std::cout << std::endl;

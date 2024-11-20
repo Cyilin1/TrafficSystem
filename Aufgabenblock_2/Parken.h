@@ -1,4 +1,4 @@
-#ifndef PARKEN_H
+﻿#ifndef PARKEN_H
 #define PARKEN_H
 
 #include "Verhalten.h"
@@ -9,7 +9,7 @@ public:
       : Verhalten(weg), p_dStartzeit(dStartzeit) {}
 
   // 停放车辆，在达到启动时间之前返回 0.0
-  double dStrecke(Fahrzeug &aFzg, double dZeitIntervall) override;
+  double dStrecke(Vehicle &aFzg, double dZeitIntervall) override;
 
 private:
   double p_dStartzeit;     // 停放开始时间

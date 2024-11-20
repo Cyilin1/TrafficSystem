@@ -2,8 +2,8 @@
 // Created by Cyilin on 24-10-9.
 //
 
-#ifndef FAHRZEUG_H
-#define FAHRZEUG_H
+#ifndef Vehicle_H
+#define Vehicle_H
 #include "Simulationsobjekt.h"
 #include "Verhalten.h"
 
@@ -12,21 +12,21 @@
 #include <string>
 extern double d_GlobaleZeit;
 
-class Fahrzeug : public Simulationsobjekt {
+class Vehicle : public Simulationsobjekt {
 protected:
-  double p_dMaxGeschwindigkeit;     // 最大速度
-  double p_dGesamtstrecke;          // 总行驶距离
-  double p_dGesamtZeit;             // 总行驶时间
-  double p_dAbschnittStrecke = 0.0; // 当前路径上的行驶距离
+  double m_maxSpeed;           // 最大速度
+  double m_totalDistance;      // 总行驶距离
+  double m_runingTime;         // 总行驶时间
+  double m_currDistance = 0.0; // 当前路径上的行驶距离
 
-  std::unique_ptr<Verhalten> p_pVerhalten; // 管理Verhalten的智能指针
+  std::unique_ptr<Verhalten> m_behavior; // 管理Verhalten的智能指针
 
 public:
-  Fahrzeug(const Fahrzeug &) = delete;
-  Fahrzeug();
-  explicit Fahrzeug(const std::string &name) : Simulationsobjekt(name) {};
-  Fahrzeug(const std::string &name, double maxGeschwindigkeit);
-  virtual ~Fahrzeug() {};
+  Vehicle(const Vehicle &) = delete;
+  Vehicle();
+  explicit Vehicle(const std::string &name) : Simulationsobjekt(name) {};
+  Vehicle(const std::string &name, double maxSpeed);
+  virtual ~Vehicle() {};
 
   static void vKopf();
   virtual void vAusgeben() const override;
@@ -39,14 +39,14 @@ public:
   };
   virtual void vZeichnen(const Weg &weg) const { return; };
 
-  bool operator<(const Fahrzeug &other) const {
-    return this->p_dGesamtstrecke < other.p_dGesamtstrecke;
+  bool operator<(const Vehicle &other) const {
+    return this->m_totalDistance < other.m_totalDistance;
   }
 
-  Fahrzeug &operator=(const Fahrzeug &other) {
+  Vehicle &operator=(const Vehicle &other) {
     if (this != &other) {
       p_sName = other.p_sName;
-      p_dMaxGeschwindigkeit = other.p_dMaxGeschwindigkeit;
+      m_maxSpeed = other.m_maxSpeed;
       // 不复制 p_iD，因为 ID 必须是唯一的
       // 不复制 p_dGesamtstrecke 和 p_dGesamtZeit,
       // 因为这些是特定于当前对象的状态
@@ -60,8 +60,8 @@ public:
 
   // 重载 vNeueStrecke 函数，处理停放车辆（有开始时间）
   void vNeueStrecke(Weg &weg, double dStartzeit);
-  double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
-  double dGesamtstrecke() const { return p_dGesamtstrecke; }
+  double getAbschnittStrecke() const { return m_currDistance; }
+  double dGesamtstrecke() const { return m_totalDistance; }
 };
 
-#endif // FAHRZEUG_H
+#endif // Vehicle_H

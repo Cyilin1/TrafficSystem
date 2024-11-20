@@ -3,7 +3,7 @@
 #include "Fahrzeug.h"
 #include "Fahrzeugausnahme.h"
 
-double Parken::dStrecke(Fahrzeug &aFzg, double dZeitIntervall) {
+double Parken::dStrecke(Vehicle &aFzg, double dZeitIntervall) {
   if (d_GlobaleZeit < p_dStartzeit) {
     std::cout << "Fahrzeug " << aFzg.getName() << " 停放中，启动时间未到达。"
               << std::endl;

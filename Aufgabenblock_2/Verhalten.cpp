@@ -1,4 +1,4 @@
-#include "Verhalten.h"
+﻿#include "Verhalten.h"
 #include "Fahrzeug.h"
 
 // double Verhalten::dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall) {
@@ -15,7 +15,7 @@
 //  return p_dLetzteBerechneteStrecke;
 //}
 
-double Verhalten::dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall) {
+double Verhalten::dStrecke(Vehicle &fahrzeug, double dZeitIntervall) {
   double dMaxSpeed = fahrzeug.dGeschwindigkeit();
 
   double dMoeglicheStrecke = dMaxSpeed * dZeitIntervall;
