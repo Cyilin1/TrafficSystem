@@ -3,69 +3,53 @@
 #include "vertagt_aktion.h"
 #include <list>
 
-namespace vertagt {
-template <class T> class VListe {
+namespace deferred {
+template <class T> class DeferredList {
 private:
-  std::list<T> p_objekte;
-  std::list<std::unique_ptr<VAktion<T>>> p_aktionen;
+  std::list<T> m_object;
+  std::list<std::unique_ptr<Action<T>>> m_actions;
 
 public:
   // Typdefinitionen
   using iterator = typename std::list<T>::iterator;
   using const_iterator = typename std::list<T>::const_iterator;
 
-  // Konstruktoren
-  VListe() = default; // Benötigt man einen Standardkonstruktor?
-  // Destruktor
-  ~VListe() {
-    vAktualisieren();
-    p_objekte.clear();
+  DeferredList() = default;
+  ~DeferredList() {
+    applyActionToList();
+    m_object.clear();
   }
 
   void clear() {
-    vAktualisieren();
-    p_objekte.clear();
+    applyActionToList();
+    m_object.clear();
   }
 
-  // Lesefunktionen
-  const_iterator begin() const { return p_objekte.begin(); }
+  const_iterator begin() const { return m_object.begin(); }
+  const_iterator end() const { return m_object.end(); }
+  iterator begin() { return m_object.begin(); }
+  iterator end() { return m_object.end(); }
+  bool empty() const { return m_object.empty(); }
 
-  const_iterator end() const { return p_objekte.end(); }
-
-  iterator begin() { return p_objekte.begin(); }
-
-  iterator end() { return p_objekte.end(); }
-
-  bool empty() const { return p_objekte.empty(); }
-
-  // Schreibfunktionen
   void push_back(T obj) {
-    // Aktionselement für PushBack auf Liste erzeugen
-    p_aktionen.push_back(
-        std::make_unique<VPushBack<T>>(p_objekte, std::move(obj)));
+    m_actions.push_back(
+        std::make_unique<PushBack<T>>(m_object, std::move(obj)));
   }
 
   void push_front(T obj) {
-    // Aktionselement für PushBack auf Liste erzeugen
-    p_aktionen.push_back(
-        std::make_unique<VPushFront<T>>(p_objekte, std::move(obj)));
+    m_actions.push_back(
+        std::make_unique<PushFront<T>>(m_object, std::move(obj)));
   }
 
   void erase(iterator it) {
-    // Aktionselement für PushBack auf Liste erzeugen (hier Iterator statt
-    // Objekt !)
-    p_aktionen.push_back(std::make_unique<VErase<T>>(p_objekte, it));
+    m_actions.push_back(std::make_unique<Erase<T>>(m_object, it));
   }
 
-  // Änderungen auf Objektliste übertragen
-  void vAktualisieren() {
-    // Änderungen auf Objektliste übertragen
-    for (auto &pAktion : p_aktionen) {
-      // Aktion ausführen
-      pAktion->vAusfuehren(); // 执行每个操作
+  void applyActionToList() {
+    for (auto &action : m_actions) {
+      action->executeAction(); // 执行每个操作
     }
-    // Aktionsliste löschen
-    p_aktionen.clear(); // 清空操作列表
+    m_actions.clear(); // 清空操作列表
   }
 };
-} // namespace vertagt
+} // namespace deferred

@@ -23,7 +23,7 @@ void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFahrzeug, double dStartzeit) {
   pFahrzeug->vNeueStrecke(*this, dStartzeit);    // 设置停放行为
   p_pFahrzeuge.push_front(std::move(pFahrzeug)); // 添加到列表前端
-  p_pFahrzeuge.vAktualisieren();
+  p_pFahrzeuge.applyActionToList();
   std::cout << "Fahrzeug " << (*p_pFahrzeuge.begin())->getName()
             << " 被添加到路径 " << p_sName << " 上， 停放时间为 " << dStartzeit
             << " 小时\n";
@@ -50,7 +50,7 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug &fahrzeug) {
 }
 
 void Weg::vSimulieren() {
-  p_pFahrzeuge.vAktualisieren();
+  p_pFahrzeuge.applyActionToList();
   for (const auto &fzg : p_pFahrzeuge) {
     try {
       fzg->vSimulieren();
@@ -59,7 +59,7 @@ void Weg::vSimulieren() {
       ex.vBearbeiten(); // 调用异常的处理函数
     }
   }
-  p_pFahrzeuge.vAktualisieren();
+  p_pFahrzeuge.applyActionToList();
 
   //  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end();) {
   //    try {

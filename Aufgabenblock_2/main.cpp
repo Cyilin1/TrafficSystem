@@ -490,14 +490,14 @@ void vAufgabe_6a() {
   std::uniform_int_distribution<int> dist(1, 10);
 
   // 创建一个延迟列表
-  vertagt::VListe<int> liste;
+  deferred::DeferredList<int> liste;
 
   // 填充列表，生成 10 个随机整数
   for (int i = 0; i < 10; ++i) {
     int zuf = dist(device);
     liste.push_back(zuf);
   }
-  liste.vAktualisieren();
+  liste.applyActionToList();
 
   // 输出列表
   std::cout << "Initial list: ";
@@ -521,7 +521,7 @@ void vAufgabe_6a() {
   std::cout << std::endl;
 
   // 调用 vAktualisieren() 来更新列表
-  liste.vAktualisieren();
+  liste.applyActionToList();
 
   // 输出列表（此时列表应已更改）
   std::cout << "List after update: ";
@@ -541,7 +541,7 @@ void vAufgabe_6a() {
   }
   std::cout << std::endl;
   // 调用 vAktualisieren() 来更新列表
-  liste.vAktualisieren();
+  liste.applyActionToList();
 
   // 输出列表（此时列表应已更改）
   std::cout << "List after update: ";

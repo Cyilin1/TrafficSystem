@@ -20,7 +20,7 @@ class Weg : public Simulationsobjekt {
 private:
   double p_dLaenge;         // 路径长度
   Tempolimit p_eTempolimit; // 速度限制
-  vertagt::VListe<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
+  deferred::DeferredList<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
   //  std::list<std::unique_ptr<Fahrzeug>> p_pFahrzeuge; // 车辆列表
 
 public:
@@ -48,7 +48,8 @@ public:
 
   double dGetTempolimit() const;
 
-  const vertagt::VListe<std::unique_ptr<Fahrzeug>> &getFahrzeuge() const {
+  const deferred::DeferredList<std::unique_ptr<Fahrzeug>> &
+  getFahrzeuge() const {
     return p_pFahrzeuge;
   }
 };
