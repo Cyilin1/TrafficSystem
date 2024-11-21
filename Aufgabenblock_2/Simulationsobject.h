@@ -1,5 +1,5 @@
-#ifndef SIMULATIONSOBJEKT_H
-#define SIMULATIONSOBJEKT_H
+﻿#ifndef Simulationsobject_H
+#define Simulationsobject_H
 
 #include <cmath>
 #include <iomanip> // 用于格式化输出
@@ -7,7 +7,7 @@
 #include <limits>
 #include <string>
 
-class Simulationsobjekt {
+class Simulationsobject {
 private:
   static int p_iMaxID; // 静态变量确保ID唯一
   const int p_iID;     // 每个对象的唯一ID
@@ -18,30 +18,30 @@ protected:
 
 public:
   // 禁止拷贝构造函数和赋值运算符
-  Simulationsobjekt(const Simulationsobjekt &) = delete;
-  Simulationsobjekt &operator=(const Simulationsobjekt &) = delete;
+  Simulationsobject(const Simulationsobject &) = delete;
+  Simulationsobject &operator=(const Simulationsobject &) = delete;
 
-  Simulationsobjekt() : p_iID(++p_iMaxID), p_sName("") {};
-  explicit Simulationsobjekt(const std::string &name)
+  Simulationsobject() : p_iID(++p_iMaxID), p_sName("") {};
+  explicit Simulationsobject(const std::string &name)
       : p_iID(++p_iMaxID), p_sName(name), p_dZeit(0.0) {
-    std::cout << "Simulationsobjekt created: Name=\"" << p_sName
+    std::cout << "Simulationsobject created: Name=\"" << p_sName
               << "\", ID=" << p_iID << std::endl;
   }
 
-  virtual ~Simulationsobjekt() {
-    std::cout << "Simulationsobjekt destroyed: Name=\"" << p_sName
+  virtual ~Simulationsobject() {
+    std::cout << "Simulationsobject destroyed: Name=\"" << p_sName
               << "\", ID=" << p_iID << std::endl;
   }
 
   // 纯虚函数
-  virtual void vSimulieren() = 0;
+  virtual void executeSimulation() = 0;
 
   // 输出函数
-  virtual void vAusgeben() const;
-  static void vKopf();
+  virtual void displayData() const;
+  static void displayHeader();
 
   // 通过ID比较相等性
-  bool operator==(const Simulationsobjekt &other) const {
+  bool operator==(const Simulationsobject &other) const {
     return this->p_iID == other.p_iID;
   }
 
@@ -52,8 +52,8 @@ public:
   const std::string &getName() const { return p_sName; }
 
   // 获取时间
-  double getZeit() const { return p_dZeit; }
+  double getTime() const { return p_dZeit; }
 
-  void setZeit(double zeit) { p_dZeit = zeit; }
+  void setTime(double zeit) { p_dZeit = zeit; }
 };
-#endif // SIMULATIONSOBJEKT_H
+#endif // Simulationsobject_H

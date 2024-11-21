@@ -4,12 +4,12 @@
 #include "Verhalten.h"
 class Vehicle;
 
-class Fahren : public Verhalten {
+class DrivingBehavior : public TravelBehavior {
 public:
-  Fahren(Weg &weg) : Verhalten(weg) {}
+  DrivingBehavior(Weg &weg) : TravelBehavior(weg) {}
 
   // 行驶时计算行驶的距离
-  double dStrecke(Vehicle &fahrzeug, double dZeitIntervall) override;
+  double calculateDistance(Vehicle &vehicle, double timeInterval) override;
 };
 
 #endif // FAHREN_H

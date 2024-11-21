@@ -2,19 +2,19 @@
 #include "Fahrzeug.h"
 #include "Fahrzeugausnahme.h"
 
-double Fahren::dStrecke(Vehicle &fahrzeug, double dZeitIntervall) {
-  double dMaxSpeed = fahrzeug.dGeschwindigkeit();
+double DrivingBehavior::calculateDistance(Vehicle &vehicle,
+                                          double timeInterval) {
+  double dMaxSpeed = vehicle.getMaxSpeed();
 
-  double dMoeglicheStrecke = dMaxSpeed * dZeitIntervall;
-  if (fahrzeug.getAbschnittStrecke() + dMoeglicheStrecke >=
-      p_rWeg.getLaenge()) {
-    dMoeglicheStrecke = p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke();
+  double dMoeglicheStrecke = dMaxSpeed * timeInterval;
+  if (vehicle.getCurrentDistance() + dMoeglicheStrecke >= p_rWeg.getLaenge()) {
+    dMoeglicheStrecke = p_rWeg.getLaenge() - vehicle.getCurrentDistance();
     //    throw Streckenende(fahrzeug, p_rWeg);
   }
 
   double dCanRunDis =
-      p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke() - dMoeglicheStrecke;
-  std::cout << fahrzeug.getName() << " 还可行驶的距离为" << dCanRunDis
+      p_rWeg.getLaenge() - vehicle.getCurrentDistance() - dMoeglicheStrecke;
+  std::cout << vehicle.getName() << " 还可行驶的距离为" << dCanRunDis
             << std::endl;
   return dMoeglicheStrecke;
 }

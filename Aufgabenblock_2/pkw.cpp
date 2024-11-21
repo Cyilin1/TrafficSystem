@@ -9,13 +9,13 @@ PKW::PKW(const std::string &name, double maxGeschwindigkeit, double verbrauch,
   // 油箱中的油量初始化为油箱容量的一半
 }
 
-void PKW::vSimulieren() {
+void PKW::executeSimulation() {
   if (!m_behavior)
     return;
   double dZeitDelta = d_GlobaleZeit - p_dZeit;
   if (dZeitDelta <= 0)
     return;
-  double dGefahreneStrecke = m_behavior->dStrecke(*this, dZeitDelta);
+  double dGefahreneStrecke = m_behavior->calculateDistance(*this, dZeitDelta);
   // 计算所需油量
   double dBenotigteMenge = (dGefahreneStrecke / 100.0) * p_dVerbrauch;
 
@@ -39,15 +39,14 @@ void PKW::vSimulieren() {
   }
 }
 
-void PKW::vAusgeben() const {
-  Vehicle::vAusgeben();
-  std::cout << std::setw(10) << p_dTankinhalt << std::setw(15)
-            << dGeschwindigkeit();
+void PKW::displayData() const {
+  Vehicle::displayData();
+  std::cout << std::setw(10) << p_dTankinhalt << std::setw(15) << getMaxSpeed();
 }
 
-void PKW::vAusgeben(std::ostream &os) const {
-  Vehicle::vAusgeben(os);
-  os << std::setw(10) << p_dTankinhalt << std::setw(15) << dGeschwindigkeit();
+void PKW::displayData(std::ostream &os) const {
+  Vehicle::displayData(os);
+  os << std::setw(10) << p_dTankinhalt << std::setw(15) << getMaxSpeed();
 }
 
 double PKW::dTanken(double dMenge) {
@@ -62,14 +61,14 @@ double PKW::dTanken(double dMenge) {
   return tatsaechlicheMenge;
 }
 
-void PKW::vZeichnen(const Weg &weg) const {
+void PKW::drawPath(const Weg &weg) const {
   double relPosition = m_totalDistance / weg.getLaenge(); // 计算相对位置
-  double kmH = this->dGeschwindigkeit();                  // 获取车辆速度
+  double kmH = this->getMaxSpeed();                       // 获取车辆速度
   double tank = p_dTankinhalt;                            // 获取油箱剩余量
   bZeichnePKW(this->getName(), weg.getName(), relPosition, kmH, tank);
 }
 
-double PKW::dGeschwindigkeit() const {
+double PKW::getMaxSpeed() const {
   double maxGeschwindigkeit = m_maxSpeed;
   if (m_behavior) {
     double wegTempolimit = m_behavior->getWeg().dGetTempolimit();

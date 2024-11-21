@@ -3,13 +3,13 @@
 
 #include "Verhalten.h"
 
-class Parken : public Verhalten {
+class ParkingBehavior : public TravelBehavior {
 public:
-  Parken(Weg &weg, double dStartzeit)
-      : Verhalten(weg), p_dStartzeit(dStartzeit) {}
+  ParkingBehavior(Weg &weg, double dStartzeit)
+      : TravelBehavior(weg), p_dStartzeit(dStartzeit) {}
 
   // 停放车辆，在达到启动时间之前返回 0.0
-  double dStrecke(Vehicle &aFzg, double dZeitIntervall) override;
+  double calculateDistance(Vehicle &vehicle, double timeInterval) override;
 
 private:
   double p_dStartzeit;     // 停放开始时间

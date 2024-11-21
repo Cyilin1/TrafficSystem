@@ -35,8 +35,8 @@ add_executable(Block2 main.cpp
         Verhalten.cpp
         fahrrad.h
         fahrrad.cpp
-        Simulationsobjekt.h
-        Simulationsobjekt.cpp
+        Simulationsobject.h
+        Simulationsobject.cpp
         Fahrzeugausnahme.h
         Fahrzeugausnahme.cpp
         Fahren.h

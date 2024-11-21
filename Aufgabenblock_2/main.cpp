@@ -1,5 +1,5 @@
 ﻿#include "SimuClient.h"
-#include "Simulationsobjekt.h"
+#include "Simulationsobject.h"
 #include "Weg.h"
 #include "fahrrad.h"
 #include "pkw.h"
@@ -13,15 +13,15 @@ double d_GlobaleZeit = 0.0; // 定义全局时钟
 const double epsilon = 1e-6;
 const double refuelInterval = 3.0;
 
-int Simulationsobjekt::p_iMaxID = 0;
+int Simulationsobject::p_iMaxID = 0;
 
 std::ostream &operator<<(std::ostream &os, const Vehicle &Vehicle) {
-  Vehicle.vAusgeben(os);
+  Vehicle.displayData(os);
   return os;
 }
 
 std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug) {
-  fahrzeug.vAusgeben(os);
+  fahrzeug.displayData(os);
   return os;
 }
 
@@ -31,32 +31,32 @@ void vAufgabe_1_1() {
   Vehicle fahrzeug2("AUTO3", 30.00);
 
   // 输出表头
-  Vehicle::vKopf();
+  Vehicle::displayHeader();
 
   // 输出车辆数据
-  fahrzeug1.vAusgeben();
+  fahrzeug1.displayData();
   std::cout << std::endl; // 主函数负责换行
-  fahrzeug2.vAusgeben();
+  fahrzeug2.displayData();
   std::cout << std::endl; // 主函数负责换行  Aufgabe_1();
   // 模拟时间推进
   d_GlobaleZeit = 2.0; // 2小时
-  fahrzeug1.vSimulieren();
-  fahrzeug2.vSimulieren();
+  fahrzeug1.executeSimulation();
+  fahrzeug2.executeSimulation();
 
   // 第二次输出车辆数据，应该看到车辆的总里程数变化
-  fahrzeug1.vAusgeben();
+  fahrzeug1.displayData();
   std::cout << std::endl;
-  fahrzeug2.vAusgeben();
+  fahrzeug2.displayData();
   std::cout << std::endl;
 
   d_GlobaleZeit = 5.0; // 5小时
-  fahrzeug1.vSimulieren();
-  fahrzeug2.vSimulieren();
+  fahrzeug1.executeSimulation();
+  fahrzeug2.executeSimulation();
 
   // 输出最终车辆数据
-  fahrzeug1.vAusgeben();
+  fahrzeug1.displayData();
   std::cout << std::endl;
-  fahrzeug2.vAusgeben();
+  fahrzeug2.displayData();
   std::cout << std::endl;
 }
 
@@ -68,7 +68,7 @@ void vAufgabe_1a0() {
   fahrzeuge.push_back(std::make_unique<Vehicle>("Audi", 60));
 
   // 输出表头
-  Vehicle::vKopf();
+  Vehicle::displayHeader();
 
   // 模拟一段时间，假设总模拟时间为10小时，每次递增0.5小时
   const double zeitschritt = 0.5; // 每次增加0.5小时
@@ -77,12 +77,12 @@ void vAufgabe_1a0() {
   while (d_GlobaleZeit <= simzeit) {
     // 调用每个车辆的模拟函数
     for (auto &fahrzeug : fahrzeuge) {
-      fahrzeug->vSimulieren();
+      fahrzeug->executeSimulation();
     }
 
     // 输出每个时间步的车辆状态
     for (const auto &fahrzeug : fahrzeuge) {
-      fahrzeug->vAusgeben();
+      fahrzeug->displayData();
       std::cout << std::endl; // 控制换行
     }
 
@@ -137,9 +137,9 @@ void vAufgabe_2() {
   }
 
   std::cout << "\n已生成的车辆信息:\n";
-  Vehicle::vKopf();
+  Vehicle::displayHeader();
   for (const auto &fahrzeug : fahrzeuge) {
-    //    fahrzeug->vAusgeben();
+    //    fahrzeug->displayData();
     //    std::cout << std::endl;
     std::cout << *fahrzeug;
     std::cout << std::endl;
@@ -155,11 +155,11 @@ void vAufgabe_2() {
 
     // 模拟每个车辆的状态
     for (auto &fahrzeug : fahrzeuge) {
-      fahrzeug->vSimulieren();
+      fahrzeug->executeSimulation();
     }
 
     // 输出车辆的当前状态
-    Vehicle::vKopf();
+    Vehicle::displayHeader();
     for (auto &fahrzeug : fahrzeuge) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -200,14 +200,14 @@ void vAufgabe_3() {
   Vehicle fz2("Auto 2", 150.0);
 
   std::cout << "初始状态:" << std::endl;
-  Vehicle::vKopf();
+  Vehicle::displayHeader();
   std::cout << fz1 << std::endl;
   std::cout << fz2 << std::endl;
 
   fz1 = fz2; // 将 fz2 赋值给 fz1
 
   std::cout << "\n赋值后的状态:" << std::endl;
-  Vehicle::vKopf();
+  Vehicle::displayHeader();
   std::cout << fz1 << std::endl;
   std::cout << fz2 << std::endl;
 
@@ -216,10 +216,10 @@ void vAufgabe_3() {
 
   while (d_GlobaleZeit < totalSimulationTime) {
     d_GlobaleZeit += simTimeStep;
-    fz1.vSimulieren();
-    fz2.vSimulieren();
+    fz1.executeSimulation();
+    fz2.executeSimulation();
 
-    Vehicle::vKopf();
+    Vehicle::displayHeader();
     std::cout << fz1 << std::endl;
     std::cout << fz2 << std::endl;
 
@@ -233,7 +233,7 @@ void vAufgabe_3() {
 void vAufgabe_4() {
   // 创建一个 Weg 对象，名称为"Autobahn"，长度为100，默认速度限制为无限制
   Weg autobahn("Autobahn", 100.0, Tempolimit::Unlimited);
-  Weg::vKopf();
+  Weg::displayHeader();
   std::cout << autobahn << std::endl;
 }
 
@@ -259,11 +259,11 @@ void vAufgabe_5() {
     // 调用每个车辆的模拟函数
     std::cout << "Round " << round << " 开始" << std::endl;
 
-    weg.vSimulieren();
-    Weg::vKopf();
+    weg.executeSimulation();
+    Weg::displayHeader();
     std::cout << weg << std::endl; // 输出每一步仿真后的路径状态
     // 输出车辆的当前状态
-    Vehicle::vKopf();
+    Vehicle::displayHeader();
     for (auto &fahrzeug : weg.getFahrzeuge()) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -308,10 +308,10 @@ void vAufgabe_6() {
     std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
     vSetzeZeit(d_GlobaleZeit);
 
-    landstrasse.vSimulieren();
-    innerorts.vSimulieren();
+    landstrasse.executeSimulation();
+    innerorts.executeSimulation();
 
-    Vehicle::vKopf();
+    Vehicle::displayHeader();
     for (auto &fahrzeug : landstrasse.getFahrzeuge()) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -323,7 +323,7 @@ void vAufgabe_6() {
     std::cout << "==================车辆信息Finished=================="
               << std::endl;
 
-    Weg::vKopf();
+    Weg::displayHeader();
     std::cout << landstrasse << std::endl; // 输出乡村道路上的车辆状态
     std::cout << innerorts << std::endl;   // 输出市区道路上的车辆状态
     std::cout << "==================================" << std::endl;
@@ -362,14 +362,14 @@ void vAufgabe_6_1() {
     std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
     vSetzeZeit(d_GlobaleZeit);
 
-    landstrasse.vSimulieren();
-    innerorts.vSimulieren();
+    landstrasse.executeSimulation();
+    innerorts.executeSimulation();
 
-    Vehicle::vKopf();
+    Vehicle::displayHeader();
     for (auto &fahrzeug : landstrasse.getFahrzeuge()) {
       //            double relPos = fahrzeug->dGetRelPosition(); //
       //            获取车辆在路径上的相对位置 double kmh =
-      //            fahrzeug->dGeschwindigkeit(); double tank =
+      //            fahrzeug->getMaxSpeed(); double tank =
       //            fahrzeug->dTankinhalt();
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -381,7 +381,7 @@ void vAufgabe_6_1() {
     std::cout << "==================车辆信息Finished=================="
               << std::endl;
 
-    Weg::vKopf();
+    Weg::displayHeader();
     std::cout << landstrasse << std::endl; // 输出乡村道路上的车辆状态
     std::cout << innerorts << std::endl;   // 输出市区道路上的车辆状态
     std::cout << "==================================" << std::endl;
@@ -456,10 +456,10 @@ void vAufgabe_6_3() {
     std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
     vSetzeZeit(d_GlobaleZeit);
 
-    hin.vSimulieren();
-    rueck.vSimulieren();
+    hin.executeSimulation();
+    rueck.executeSimulation();
 
-    Vehicle::vKopf();
+    Vehicle::displayHeader();
     for (auto &fahrzeug : hin.getFahrzeuge()) {
       std::cout << *fahrzeug;
       std::cout << std::endl;
@@ -471,7 +471,7 @@ void vAufgabe_6_3() {
     std::cout << "==================车辆信息Finished=================="
               << std::endl;
 
-    Weg::vKopf();
+    Weg::displayHeader();
     std::cout << hin << std::endl;
     std::cout << rueck << std::endl;
     std::cout << "==================================" << std::endl;

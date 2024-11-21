@@ -19,19 +19,19 @@
 //  const Weg &getWeg() const { return p_rWeg; }
 //};
 
-class Verhalten {
+class TravelBehavior {
 public:
-  explicit Verhalten(Weg &weg) : p_rWeg(weg) {}
-  virtual ~Verhalten() {};
+  explicit TravelBehavior(Weg &weg) : p_rWeg(weg) {}
+  virtual ~TravelBehavior() {};
 
   // 纯虚函数，子类必须实现
-  virtual double dStrecke(Vehicle &aFzg, double dZeitIntervall) = 0;
+  virtual double calculateDistance(Vehicle &vehicle, double timeInterval) = 0;
   // 获取路径的引用
   Weg &getWeg() const { return p_rWeg; }
 
 protected:
-  Weg &p_rWeg;                             // 路径引用
-  double p_dLetzteBerechneteStrecke = 0.0; // 暂存每次仿真步骤中的计算结果
+  Weg &p_rWeg;                           // 路径引用
+  double m_lastCalculatedDistance = 0.0; // 暂存每次仿真步骤中的计算结果
 };
 
 #endif // VERHALTEN_H

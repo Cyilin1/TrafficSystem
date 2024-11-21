@@ -27,5 +27,5 @@ void EndOfPathException::handleException() const {
               << p_Weg.getName() << " 的终点，已将其移出行驶列表。"
               << std::endl;
   }
-  removedVehicle->vZeichnen(p_Weg); // 绘制车辆
+  removedVehicle->drawPath(p_Weg); // 绘制车辆
 }

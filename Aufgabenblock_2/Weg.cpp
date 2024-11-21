@@ -3,15 +3,15 @@
 #include "Fahrzeugausnahme.h"
 
 Weg::Weg()
-    : Simulationsobjekt(""), p_dLaenge(0.0),
+    : Simulationsobject(""), p_dLaenge(0.0),
       p_eTempolimit(Tempolimit::Unlimited) {}
 
 Weg::Weg(const std::string &name, double laenge, Tempolimit tempolimit)
-    : Simulationsobjekt(name), p_dLaenge(laenge), p_eTempolimit(tempolimit) {}
+    : Simulationsobject(name), p_dLaenge(laenge), p_eTempolimit(tempolimit) {}
 
 void Weg::vAnnahme(std::unique_ptr<Vehicle> pFzg) {
   // 使用 move 将车辆移动到车辆列表
-  pFzg->vNeueStrecke(*this);
+  pFzg->setNewPath(*this);
   m_vehicleList.push_back(std::move(pFzg));
   //  m_vehicleList.vAktualisieren();
   // 获取最后添加的车辆，通知它新的路径
@@ -21,7 +21,7 @@ void Weg::vAnnahme(std::unique_ptr<Vehicle> pFzg) {
 }
 
 void Weg::vAnnahme(std::unique_ptr<Vehicle> pVehicle, double dStartzeit) {
-  pVehicle->vNeueStrecke(*this, dStartzeit);     // 设置停放行为
+  pVehicle->setNewPath(*this, dStartzeit);       // 设置停放行为
   m_vehicleList.push_front(std::move(pVehicle)); // 添加到列表前端
   m_vehicleList.applyActionToList();
   std::cout << "Vehicle " << (*m_vehicleList.begin())->getName()
@@ -49,12 +49,12 @@ std::unique_ptr<Vehicle> Weg::pAbgabe(const Vehicle &Fahrzeug) {
   return nullptr;
 }
 
-void Weg::vSimulieren() {
+void Weg::executeSimulation() {
   m_vehicleList.applyActionToList();
   for (const auto &fzg : m_vehicleList) {
     try {
-      fzg->vSimulieren();
-      fzg->vZeichnen(*this); // 绘制车辆
+      fzg->executeSimulation();
+      fzg->drawPath(*this); // 绘制车辆
     } catch (const VehicleException &ex) {
       ex.handleException(); // 调用异常的处理函数
     }
@@ -63,8 +63,8 @@ void Weg::vSimulieren() {
 
   //  for (auto it = m_vehicleList.begin(); it != m_vehicleList.end();) {
   //    try {
-  //      (*it)->vSimulieren();
-  //      (*it)->vZeichnen(*this);
+  //      (*it)->executeSimulation();
+  //      (*it)->drawPath(*this);
   //      ++it; // 手动增量，以避免在添加或删除元素时失效
   //    } catch (const Vehicleausnahme &ex) {
   //      ex.vBearbeiten();
@@ -74,8 +74,8 @@ void Weg::vSimulieren() {
   //  }
 }
 
-void Weg::vAusgeben(std::ostream &os) const {
-  Simulationsobjekt::vAusgeben();
+void Weg::displayData(std::ostream &os) const {
+  Simulationsobject::displayData();
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
   os << std::setw(10) << p_dLaenge << " | ";
@@ -90,8 +90,8 @@ void Weg::vAusgeben(std::ostream &os) const {
   os << ")";
 }
 
-void Weg::vAusgeben() const {
-  Simulationsobjekt::vAusgeben();
+void Weg::displayData() const {
+  Simulationsobject::displayData();
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
   std::cout << std::setw(10) << p_dLaenge << " : ";
@@ -119,7 +119,7 @@ double Weg::dGetTempolimit() const {
   }
 }
 
-void Weg::vKopf() {
+void Weg::displayHeader() {
   std::cout << std::resetiosflags(std::ios::adjustfield)
             << std::setiosflags(std::ios::left);
   std::cout << std::setw(5) << "ID" << " | " << std::setw(15) << "Name" << " | "
