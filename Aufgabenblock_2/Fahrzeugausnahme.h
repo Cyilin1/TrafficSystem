@@ -8,29 +8,30 @@
 class Vehicle;
 class Weg;
 
-class Fahrzeugausnahme : public std::exception {
+class VehicleException : public std::exception {
 protected:
-  Vehicle &p_Fahrzeug;
+  Vehicle &m_vehicle;
   Weg &p_Weg;
 
 public:
-  Fahrzeugausnahme(Vehicle &fzg, Weg &weg);
+  VehicleException(Vehicle &vehicle, Weg &weg);
 
-  virtual void vBearbeiten() const = 0;
+  virtual void handleException() const = 0;
 };
 
-class Losfahren : public Fahrzeugausnahme {
+class StartException : public VehicleException {
 public:
-  Losfahren(Vehicle &fzg, Weg &weg) : Fahrzeugausnahme(fzg, weg) {}
+  StartException(Vehicle &vehicle, Weg &weg) : VehicleException(vehicle, weg) {}
 
-  void vBearbeiten() const override;
+  void handleException() const override;
 };
 
-class Streckenende : public Fahrzeugausnahme {
+class EndOfPathException : public VehicleException {
 public:
-  Streckenende(Vehicle &fzg, Weg &weg) : Fahrzeugausnahme(fzg, weg) {}
+  EndOfPathException(Vehicle &vehicle, Weg &weg)
+      : VehicleException(vehicle, weg) {}
 
-  void vBearbeiten() const override;
+  void handleException() const override;
 };
 
 #endif // FAHRZEUGAUSNAHME_H

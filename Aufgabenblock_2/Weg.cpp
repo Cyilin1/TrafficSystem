@@ -55,8 +55,8 @@ void Weg::vSimulieren() {
     try {
       fzg->vSimulieren();
       fzg->vZeichnen(*this); // 绘制车辆
-    } catch (const Fahrzeugausnahme &ex) {
-      ex.vBearbeiten(); // 调用异常的处理函数
+    } catch (const VehicleException &ex) {
+      ex.handleException(); // 调用异常的处理函数
     }
   }
   m_vehicleList.applyActionToList();

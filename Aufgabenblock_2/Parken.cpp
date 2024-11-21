@@ -15,7 +15,7 @@ double Parken::dStrecke(Vehicle &aFzg, double dZeitIntervall) {
               << std::endl;
     bGestartet = true;
     aFzg.setZeit(d_GlobaleZeit);
-    throw Losfahren(aFzg, Verhalten::getWeg());
+    throw StartException(aFzg, Verhalten::getWeg());
   }
 
   return Verhalten::dStrecke(aFzg, dZeitIntervall);

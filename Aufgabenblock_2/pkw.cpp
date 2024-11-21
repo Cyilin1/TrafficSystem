@@ -34,7 +34,7 @@ void PKW::vSimulieren() {
   p_dZeit = d_GlobaleZeit;
   // 检查是否需要抛出异常
   if (m_currDistance >= m_behavior->getWeg().getLaenge()) {
-    throw Streckenende(*this, m_behavior->getWeg());
+    throw EndOfPathException(*this, m_behavior->getWeg());
     //  抛出到达终点异常
   }
 }

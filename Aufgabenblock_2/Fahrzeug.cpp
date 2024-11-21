@@ -79,5 +79,5 @@ void Vehicle::vNeueStrecke(Weg &weg, double dStartzeit) {
 double Vehicle::dGeschwindigkeit() const { return m_maxSpeed; }
 
 void Vehicle::vLosfahren() {
-  throw Losfahren(*this, m_behavior->getWeg()); // 抛出启动异常
+  throw StartException(*this, m_behavior->getWeg()); // 抛出启动异常
 }
