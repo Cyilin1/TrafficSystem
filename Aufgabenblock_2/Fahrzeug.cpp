@@ -35,8 +35,8 @@ void Vehicle::displayData(std::ostream &os) const {
 void Vehicle::displayHeader() {
   Simulationsobject::displayHeader();
   std::cout << std::setw(10) << "Max Speed" << " | " << std::setw(10)
-            << "Mileage" << " | " << std::setw(10) << "Fuel" << std::setw(15)
-            << "Current Speed" << std::endl;
+            << "Mileage" << " | " << std::setw(10) << "Fuel" << std::endl;
+  //            << std::setw(15)     << "Current Speed" << std::endl;
   std::cout << "-------------------------------------------------------"
             << std::endl;
 }
@@ -44,7 +44,7 @@ void Vehicle::displayHeader() {
 void Vehicle::executeSimulation() {
   if (m_behavior) {
     //    double dAktuelleGeschwindigkeit = getMaxSpeed();
-    double dZeitDelta = d_GlobaleZeit - p_dZeit;
+    double dZeitDelta = globalTime - p_dZeit;
     if (dZeitDelta <= 0)
       return;
     //    double dGefahreneStrecke = dAktuelleGeschwindigkeit * dZeitDelta;
@@ -54,7 +54,7 @@ void Vehicle::executeSimulation() {
     m_currDistance += dGefahreneStrecke; // 更新当前路径上的行驶距离
     m_totalDistance += dGefahreneStrecke;
     m_runingTime += dZeitDelta;
-    p_dZeit = d_GlobaleZeit;
+    p_dZeit = globalTime;
 
     //    // 检查是否需要抛出异常
     //    if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {

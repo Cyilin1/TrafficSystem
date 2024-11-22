@@ -9,14 +9,14 @@
 #include <string>
 #include <vector>
 
-double d_GlobaleZeit = 0.0; // 定义全局时钟
+double globalTime = 0.0; // 定义全局时钟
 const double epsilon = 1e-6;
 const double refuelInterval = 3.0;
 
 int Simulationsobject::p_iMaxID = 0;
 
-std::ostream &operator<<(std::ostream &os, const Vehicle &Vehicle) {
-  Vehicle.displayData(os);
+std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle) {
+  vehicle.displayData(os);
   return os;
 }
 
@@ -39,7 +39,7 @@ void vAufgabe_1_1() {
   fahrzeug2.displayData();
   std::cout << std::endl; // 主函数负责换行  Aufgabe_1();
   // 模拟时间推进
-  d_GlobaleZeit = 2.0; // 2小时
+  globalTime = 2.0; // 2小时
   fahrzeug1.executeSimulation();
   fahrzeug2.executeSimulation();
 
@@ -49,7 +49,7 @@ void vAufgabe_1_1() {
   fahrzeug2.displayData();
   std::cout << std::endl;
 
-  d_GlobaleZeit = 5.0; // 5小时
+  globalTime = 5.0; // 5小时
   fahrzeug1.executeSimulation();
   fahrzeug2.executeSimulation();
 
@@ -74,7 +74,7 @@ void vAufgabe_1a0() {
   const double zeitschritt = 0.5; // 每次增加0.5小时
   const double simzeit = 10.0;    // 总模拟时间为10小时
 
-  while (d_GlobaleZeit <= simzeit) {
+  while (globalTime <= simzeit) {
     // 调用每个车辆的模拟函数
     for (auto &fahrzeug : fahrzeuge) {
       fahrzeug->executeSimulation();
@@ -88,10 +88,10 @@ void vAufgabe_1a0() {
 
     // 输出当前时间（用于跟踪时间进度）
     std::cout << "当前时间: " << std::fixed << std::setprecision(2)
-              << d_GlobaleZeit << " 小时" << std::endl;
+              << globalTime << " 小时" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
     // 增加全局时钟
-    d_GlobaleZeit += zeitschritt;
+    globalTime += zeitschritt;
   }
 }
 
@@ -133,7 +133,7 @@ void vAufgabe_2() {
     std::cin >> maxGeschwindigkeit;
 
     // 创建 Fahrrad 对象并放入 vector
-    fahrzeuge.push_back(std::make_unique<Fahrrad>(name, maxGeschwindigkeit));
+    fahrzeuge.push_back(std::make_unique<Bicycle>(name, maxGeschwindigkeit));
   }
 
   std::cout << "\n已生成的车辆信息:\n";
@@ -149,9 +149,9 @@ void vAufgabe_2() {
   double totalSimulationTime = 8.0; // 总模拟时间5小时
   double lastRefuelTime = 0.0;      // 上次加油的时间
 
-  while (d_GlobaleZeit < totalSimulationTime) {
+  while (globalTime < totalSimulationTime) {
     // 增加全局时间
-    d_GlobaleZeit += simTimeStep;
+    globalTime += simTimeStep;
 
     // 模拟每个车辆的状态
     for (auto &fahrzeug : fahrzeuge) {
@@ -165,15 +165,15 @@ void vAufgabe_2() {
       std::cout << std::endl;
     }
 
-    if (std::fabs(d_GlobaleZeit - lastRefuelTime - refuelInterval) < epsilon ||
-        d_GlobaleZeit > lastRefuelTime + refuelInterval) {
+    if (std::fabs(globalTime - lastRefuelTime - refuelInterval) < epsilon ||
+        globalTime > lastRefuelTime + refuelInterval) {
       std::cout << "\n达到 " << lastRefuelTime + refuelInterval
                 << " 小时，为所有汽车加满油。\n";
       for (auto &fahrzeug : fahrzeuge) {
         // 尝试加油
         PKW *pkw = dynamic_cast<PKW *>(fahrzeug.get());
         if (pkw) {
-          double fuelAdded = pkw->dTanken();
+          double fuelAdded = pkw->fillTank();
           std::cout << pkw->getName() << " 加油: " << fuelAdded << " 升\n";
         }
       }
@@ -181,7 +181,7 @@ void vAufgabe_2() {
     }
 
     std::cout << "当前时间: " << std::fixed << std::setprecision(2)
-              << d_GlobaleZeit << " 小时" << std::endl;
+              << globalTime << " 小时" << std::endl;
     std::cout << "--------------------------------------------" << std::endl;
     std::cout << std::endl;
   }
@@ -214,8 +214,8 @@ void vAufgabe_3() {
   double simTimeStep = 0.5;         // 每个时间步增加0.5小时
   double totalSimulationTime = 8.0; // 总模拟时间5小时
 
-  while (d_GlobaleZeit < totalSimulationTime) {
-    d_GlobaleZeit += simTimeStep;
+  while (globalTime < totalSimulationTime) {
+    globalTime += simTimeStep;
     fz1.executeSimulation();
     fz2.executeSimulation();
 
@@ -224,7 +224,7 @@ void vAufgabe_3() {
     std::cout << fz2 << std::endl;
 
     std::cout << "当前时间: " << std::fixed << std::setprecision(2)
-              << d_GlobaleZeit << " 小时" << std::endl;
+              << globalTime << " 小时" << std::endl;
     std::cout << "--------------------------------------------" << std::endl;
     std::cout << std::endl;
   }
@@ -232,7 +232,7 @@ void vAufgabe_3() {
 
 void vAufgabe_4() {
   // 创建一个 Weg 对象，名称为"Autobahn"，长度为100，默认速度限制为无限制
-  Weg autobahn("Autobahn", 100.0, Tempolimit::Unlimited);
+  Weg autobahn("Autobahn", 100.0, SpeedRestriction::Unlimited);
   Weg::displayHeader();
   std::cout << autobahn << std::endl;
 }
@@ -242,11 +242,11 @@ void vAufgabe_5() {
 
   std::unique_ptr<Vehicle> bmw = std::make_unique<PKW>("BMW", 120.0);
   std::unique_ptr<Vehicle> audi = std::make_unique<PKW>("Audi", 130.0);
-  std::unique_ptr<Vehicle> bmx = std::make_unique<Fahrrad>("BMX", 25.0);
+  std::unique_ptr<Vehicle> bmx = std::make_unique<Bicycle>("BMX", 25.0);
 
-  weg.vAnnahme(std::move(bmw), 1.0);
-  weg.vAnnahme(std::move(audi), 1.0);
-  weg.vAnnahme(std::move(bmx), 1.0);
+  weg.addVehicle(std::move(bmw), 1.0);
+  weg.addVehicle(std::move(audi), 1.0);
+  weg.addVehicle(std::move(bmx), 1.0);
 
   std::cout << "\n模拟路径上的车辆行驶：" << std::endl;
 
@@ -255,7 +255,7 @@ void vAufgabe_5() {
   const double simzeit = 5.0;     // 总模拟时间为10小时
   int round = 1;
 
-  while (d_GlobaleZeit <= simzeit) {
+  while (globalTime <= simzeit) {
     // 调用每个车辆的模拟函数
     std::cout << "Round " << round << " 开始" << std::endl;
 
@@ -270,10 +270,10 @@ void vAufgabe_5() {
     }
     // 输出当前时间（用于跟踪时间进度）
     std::cout << "当前时间: " << std::fixed << std::setprecision(2)
-              << d_GlobaleZeit << " 小时" << std::endl;
+              << globalTime << " 小时" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
     // 增加全局时钟
-    d_GlobaleZeit += zeitschritt;
+    globalTime += zeitschritt;
     round++;
   }
 }
@@ -282,8 +282,8 @@ void vAufgabe_6() {
   bInitialisiereGrafik(800, 500);
 
   // 创建两条路径，一条有乡村道路限速100 km/h，一条市区道路限速50 km/h
-  Weg landstrasse("LandstrasseHin", 500.0, Tempolimit::Landstrasse);
-  Weg innerorts("LandstrasseRueck", 500.0, Tempolimit::Innerorts);
+  Weg landstrasse("LandstrasseHin", 500.0, SpeedRestriction::RuralRoad);
+  Weg innerorts("LandstrasseRueck", 500.0, SpeedRestriction::UrbanArea);
 
   std::unique_ptr<PKW> bmw =
       std::make_unique<PKW>("BMW", 120.0); // 最大速度120 km/h
@@ -291,8 +291,8 @@ void vAufgabe_6() {
       std::make_unique<PKW>("Audi", 130.0); // 最大速度130 km/h
 
   // 将车辆添加到路径上
-  landstrasse.vAnnahme(std::move(bmw));
-  innerorts.vAnnahme(std::move(audi), 1.0);
+  landstrasse.addVehicle(std::move(bmw));
+  innerorts.addVehicle(std::move(audi), 1.0);
 
   // 设置往返道路的图形
   int koordHin[] = {700, 250, 100, 250};   // 往道路的坐标
@@ -304,9 +304,9 @@ void vAufgabe_6() {
   const double zeitschritt = 0.5;
   const double simzeit = 3.0;
 
-  while (d_GlobaleZeit <= simzeit) {
-    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
-    vSetzeZeit(d_GlobaleZeit);
+  while (globalTime <= simzeit) {
+    std::cout << "当前时间: " << globalTime << " 小时" << std::endl;
+    vSetzeZeit(globalTime);
 
     landstrasse.executeSimulation();
     innerorts.executeSimulation();
@@ -328,7 +328,7 @@ void vAufgabe_6() {
     std::cout << innerorts << std::endl;   // 输出市区道路上的车辆状态
     std::cout << "==================================" << std::endl;
     std::cout << "==================================" << std::endl;
-    d_GlobaleZeit += zeitschritt;
+    globalTime += zeitschritt;
   }
 }
 
@@ -336,8 +336,8 @@ void vAufgabe_6_1() {
   bInitialisiereGrafik(800, 500);
 
   // 创建两条路径，一条有乡村道路限速100 km/h，一条市区道路限速50 km/h
-  Weg landstrasse("LandstrasseHin", 500.0, Tempolimit::Landstrasse);
-  Weg innerorts("LandstrasseRueck", 500.0, Tempolimit::Innerorts);
+  Weg landstrasse("LandstrasseHin", 500.0, SpeedRestriction::RuralRoad);
+  Weg innerorts("LandstrasseRueck", 500.0, SpeedRestriction::UrbanArea);
 
   std::unique_ptr<PKW> bmw =
       std::make_unique<PKW>("BMW", 120.0); // 最大速度120 km/h
@@ -345,8 +345,8 @@ void vAufgabe_6_1() {
       std::make_unique<PKW>("Audi", 130.0); // 最大速度130 km/h
 
   // 将车辆添加到路径上
-  landstrasse.vAnnahme(std::move(bmw));
-  innerorts.vAnnahme(std::move(audi), 1.0);
+  landstrasse.addVehicle(std::move(bmw));
+  innerorts.addVehicle(std::move(audi), 1.0);
 
   // 设置往返道路的图形
   int koordHin[] = {700, 250, 100, 250};   // 往道路的坐标
@@ -358,9 +358,9 @@ void vAufgabe_6_1() {
   const double zeitschritt = 0.5;
   const double simzeit = 3.0;
 
-  while (d_GlobaleZeit <= simzeit) {
-    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
-    vSetzeZeit(d_GlobaleZeit);
+  while (globalTime <= simzeit) {
+    std::cout << "当前时间: " << globalTime << " 小时" << std::endl;
+    vSetzeZeit(globalTime);
 
     landstrasse.executeSimulation();
     innerorts.executeSimulation();
@@ -388,7 +388,7 @@ void vAufgabe_6_1() {
     std::cout << "==================================" << std::endl;
     vSleep(500);
 
-    d_GlobaleZeit += zeitschritt;
+    globalTime += zeitschritt;
   }
   vBeendeGrafik();
 }
@@ -430,8 +430,8 @@ void vAufgabe_6_3() {
   }
 
   // 设置路径
-  Weg hin("Hin", 100.0, Tempolimit::Unlimited);
-  Weg rueck("Rueck", 100.0, Tempolimit::Unlimited);
+  Weg hin("Hin", 100.0, SpeedRestriction::Unlimited);
+  Weg rueck("Rueck", 100.0, SpeedRestriction::Unlimited);
 
   int koordHin[] = {100, 250, 700, 250}; // 往路径坐标
   //  int koordRueck[] = {700, 250, 100, 250}; // 返路径坐标
@@ -440,21 +440,21 @@ void vAufgabe_6_3() {
   //                  koordRueck);
   // 创建车辆
   std::unique_ptr<PKW> bmw = std::make_unique<PKW>("BMW", 120.0, 1, 50.0);
-  std::unique_ptr<Fahrrad> trek = std::make_unique<Fahrrad>("Trek", 25.0);
+  std::unique_ptr<Bicycle> trek = std::make_unique<Bicycle>("Trek", 25.0);
   std::unique_ptr<PKW> audi = std::make_unique<PKW>("Audi", 100.0, 1, 60.0);
 
   // 将车辆添加到路径上
-  hin.vAnnahme(std::move(bmw));
-  hin.vAnnahme(std::move(trek), 1.0); // 将自行车设置为延迟1小时后开始
-  rueck.vAnnahme(std::move(audi));
+  hin.addVehicle(std::move(bmw));
+  hin.addVehicle(std::move(trek), 1.0); // 将自行车设置为延迟1小时后开始
+  rueck.addVehicle(std::move(audi));
 
   // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
   const double zeitschritt = 0.5;
   const double simzeit = 7;
 
-  while (d_GlobaleZeit <= simzeit) {
-    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
-    vSetzeZeit(d_GlobaleZeit);
+  while (globalTime <= simzeit) {
+    std::cout << "当前时间: " << globalTime << " 小时" << std::endl;
+    vSetzeZeit(globalTime);
 
     hin.executeSimulation();
     rueck.executeSimulation();
@@ -476,7 +476,7 @@ void vAufgabe_6_3() {
     std::cout << rueck << std::endl;
     std::cout << "==================================" << std::endl;
     std::cout << "==================================" << std::endl;
-    d_GlobaleZeit += zeitschritt;
+    globalTime += zeitschritt;
     vSleep(1000); // 暂停2000毫秒
   }
 

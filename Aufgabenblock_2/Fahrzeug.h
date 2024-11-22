@@ -10,7 +10,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
-extern double d_GlobaleZeit;
+extern double globalTime;
 
 class Vehicle : public Simulationsobject {
 protected:
@@ -35,7 +35,7 @@ public:
   virtual void executeSimulation() override;
 
   virtual double
-  dTanken(double dMenge = std::numeric_limits<double>::infinity()) {
+  fillTank(double dMenge = std::numeric_limits<double>::infinity()) {
     return 0.0;
   };
   virtual void drawPath(const Weg &weg) const { return; };

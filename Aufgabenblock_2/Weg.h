@@ -10,16 +10,16 @@
 
 class Vehicle;
 
-enum class Tempolimit {
-  Unlimited,   // 无速度限制
-  Landstrasse, // 乡村道路，限速 100 km/h
-  Innerorts    // 市区道路，限速 50 km/h
+enum class SpeedRestriction {
+  Unlimited, // 无速度限制
+  RuralRoad, // 乡村道路，限速 100 km/h
+  UrbanArea  // 市区道路，限速 50 km/h
 };
 
 class Weg : public Simulationsobject {
 private:
-  double p_dLaenge;         // 路径长度
-  Tempolimit p_eTempolimit; // 速度限制
+  double m_length;               // 路径长度
+  SpeedRestriction m_speedLimit; // 速度限制
   deferred::DeferredList<std::unique_ptr<Vehicle>> m_vehicleList;
   //  std::list<std::unique_ptr<Vehicle>> p_pVehiclee; // 车辆列表
 
@@ -28,12 +28,12 @@ public:
 
   // 带名称、长度和可选速度限制的构造函数
   Weg(const std::string &name, double laenge,
-      Tempolimit tempolimit = Tempolimit::Unlimited);
+      SpeedRestriction speedLimit = SpeedRestriction::Unlimited);
 
-  void vAnnahme(std::unique_ptr<Vehicle> pFzg);
+  void addVehicle(std::unique_ptr<Vehicle> pFzg);
   // 重载函数，接纳停放的车辆
-  void vAnnahme(std::unique_ptr<Vehicle> pVehicle, double dStartzeit);
-  std::unique_ptr<Vehicle> pAbgabe(const Vehicle &Vehicle);
+  void addVehicle(std::unique_ptr<Vehicle> pVehicle, double dStartzeit);
+  std::unique_ptr<Vehicle> removeVehicle(const Vehicle &Vehicle);
   // 模拟方法
   virtual void executeSimulation() override;
 
@@ -43,11 +43,8 @@ public:
   virtual void displayData() const override;
 
   // ==========================GETTER=======================
-  double getTempolimit() const { return static_cast<double>(p_eTempolimit); }
-  double getLaenge() const { return p_dLaenge; }
-
-  double dGetTempolimit() const;
-
+  double getLaenge() const { return m_length; }
+  double getTempolimit() const;
   const deferred::DeferredList<std::unique_ptr<Vehicle>> &getFahrzeuge() const {
     return m_vehicleList;
   }
