@@ -15,14 +15,16 @@ const double refuelInterval = 3.0;
 
 int Simulationsobject::p_iMaxID = 0;
 
-std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle) {
-  vehicle.displayData(os);
-  return os;
+std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
+{
+    vehicle.displayData(os);
+    return os;
 }
 
-std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug) {
-  fahrzeug.displayData(os);
-  return os;
+std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug)
+{
+    fahrzeug.displayData(os);
+    return os;
 }
 
 void vAufgabe_1_1() {
@@ -245,17 +247,16 @@ void vAufgabe_5() {
   std::unique_ptr<Vehicle> bmx = std::make_unique<Bicycle>("BMX", 25.0);
 
   weg.addVehicle(std::move(bmw), 1.0);
-  weg.addVehicle(std::move(audi), 1.0);
+  weg.addVehicle( std::move( audi ), 3.0 );
   weg.addVehicle(std::move(bmx), 1.0);
 
   std::cout << "\n模拟路径上的车辆行驶：" << std::endl;
 
   // 模拟一段时间，假设总模拟时间为10小时，每次递增0.5小时
-  const double zeitschritt = 0.5; // 每次增加0.5小时
+  const double zeitschritt = 0.3;     // 每次增加0.5小时
   const double simzeit = 5.0;     // 总模拟时间为10小时
-  int round = 1;
-
-  while (globalTime <= simzeit) {
+  int          round       = 1;
+  for ( globalTime = 0; globalTime < simzeit; globalTime += zeitschritt ) {
     // 调用每个车辆的模拟函数
     std::cout << "Round " << round << " 开始" << std::endl;
 
@@ -273,7 +274,6 @@ void vAufgabe_5() {
               << globalTime << " 小时" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
     // 增加全局时钟
-    globalTime += zeitschritt;
     round++;
   }
 }
@@ -487,7 +487,7 @@ void vAufgabe_6_3() {
 void vAufgabe_6a() {
   // 初始化随机数生成器
   static std::mt19937 device(0); // 固定种子以获得可复现的结果
-  std::uniform_int_distribution<int> dist(1, 10);
+  std::uniform_int_distribution< int > dist( 1, 10 );  // 随机数
 
   // 创建一个延迟列表
   deferred::DeferredList<int> liste;
@@ -495,9 +495,10 @@ void vAufgabe_6a() {
   // 填充列表，生成 10 个随机整数
   for (int i = 0; i < 10; ++i) {
     int zuf = dist(device);
-    liste.push_back(zuf);
+    liste.push_back( zuf );
   }
-  liste.applyActionToList();
+  // action有十个操作，list 0个元素
+  liste.applyActionToList();  // action 0个元素， list 10个元素
 
   // 输出列表
   std::cout << "Initial list: ";
@@ -552,7 +553,7 @@ void vAufgabe_6a() {
 }
 
 int main() {
-  vAufgabe_6_3();
+  vAufgabe_5();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }
