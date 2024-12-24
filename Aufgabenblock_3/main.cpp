@@ -434,10 +434,8 @@ void vAufgabe_6_3() {
   Weg rueck("Rueck", 100.0, Tempolimit::Unlimited);
 
   int koordHin[] = {100, 250, 700, 250}; // 往路径坐标
-  //  int koordRueck[] = {700, 250, 100, 250}; // 返路径坐标
   bZeichneStrasse(hin.getName(), rueck.getName(), hin.getLaenge(), 2, koordHin);
-  //  bZeichneStrasse(rueck.getName(), hin.getName(), rueck.getLaenge(), 2,
-  //                  koordRueck);
+
   // 创建车辆
   std::unique_ptr<PKW> bmw = std::make_unique<PKW>("BMW", 120.0, 1, 50.0);
   std::unique_ptr<Fahrrad> trek = std::make_unique<Fahrrad>("Trek", 25.0);
@@ -445,14 +443,14 @@ void vAufgabe_6_3() {
 
   // 将车辆添加到路径上
   hin.vAnnahme(std::move(bmw));
-  hin.vAnnahme(std::move(trek), 1.0); // 将自行车设置为延迟1小时后开始
+  hin.vAnnahme( std::move( trek ), 3.0 );  // 将自行车设置为延迟1小时后开始
   rueck.vAnnahme(std::move(audi));
 
-  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.5小时
-  const double zeitschritt = 0.5;
-  const double simzeit = 7;
+  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.3小时
+  const double zeitschritt = 0.3;
+  const double simzeit     = 7;
 
-  while (d_GlobaleZeit <= simzeit) {
+  for ( d_GlobaleZeit = 0; d_GlobaleZeit < simzeit; d_GlobaleZeit += zeitschritt ) {
     std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
     vSetzeZeit(d_GlobaleZeit);
 
@@ -476,8 +474,70 @@ void vAufgabe_6_3() {
     std::cout << rueck << std::endl;
     std::cout << "==================================" << std::endl;
     std::cout << "==================================" << std::endl;
-    d_GlobaleZeit += zeitschritt;
     vSleep(1000); // 暂停2000毫秒
+  }
+
+  // 结束图形会话
+  vBeendeGrafik();
+}
+
+/**
+ * @brief 增加了超车禁令
+ */
+void vAufgabe_6_4() {
+  // 初始化图形窗口
+  const int windowWidth  = 800;
+  const int windowHeight = 500;
+  if ( !bInitialisiereGrafik( windowWidth, windowHeight ) ) {
+    std::cerr << "图形界面初始化失败！" << std::endl;
+    return;
+  }
+
+  // 设置路径
+  Weg hin( "Hin", 100.0, Tempolimit::Unlimited, true );
+  Weg rueck( "Rueck", 100.0, Tempolimit::Unlimited );
+
+  int koordHin[] = { 100, 250, 700, 250 };  // 往路径坐标
+  bZeichneStrasse( hin.getName(), rueck.getName(), hin.getLaenge(), 2, koordHin );
+
+  // 创建车辆
+  std::unique_ptr< PKW >     bmw  = std::make_unique< PKW >( "BMW", 120.0, 1, 50.0 );
+  std::unique_ptr< Fahrrad > trek = std::make_unique< Fahrrad >( "Trek", 25.0 );
+  std::unique_ptr< PKW >     audi = std::make_unique< PKW >( "Audi", 100.0, 1, 60.0 );
+
+  // 将车辆添加到路径上
+  hin.vAnnahme( std::move( trek ) );
+  hin.vAnnahme( std::move( audi ) );
+  hin.vAnnahme( std::move( bmw ) );
+
+  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.3小时
+  const double zeitschritt = 0.3;
+  const double simzeit     = 7;
+
+  for ( d_GlobaleZeit = 0; d_GlobaleZeit < simzeit; d_GlobaleZeit += zeitschritt ) {
+    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
+    vSetzeZeit( d_GlobaleZeit );
+
+    hin.vSimulieren();
+    rueck.vSimulieren();
+
+    Fahrzeug::vKopf();
+    for ( auto& fahrzeug : hin.getFahrzeuge() ) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    for ( auto& fahrzeug : rueck.getFahrzeuge() ) {
+      std::cout << *fahrzeug;
+      std::cout << std::endl;
+    }
+    std::cout << "==================车辆信息Finished==================" << std::endl;
+
+    Weg::vKopf();
+    std::cout << hin << std::endl;
+    std::cout << rueck << std::endl;
+    std::cout << "==================================" << std::endl;
+    std::cout << "==================================" << std::endl;
+    vSleep( 1000 );  // 暂停2000毫秒
   }
 
   // 结束图形会话
@@ -552,7 +612,7 @@ void vAufgabe_6a() {
 }
 
 int main() {
-  vAufgabe_6_3();
+  vAufgabe_6_4();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }

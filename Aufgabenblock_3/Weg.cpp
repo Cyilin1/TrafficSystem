@@ -112,18 +112,16 @@ double Weg::getBarriere( const Fahrzeug& faz ) {
     return p_dLaenge;
   }
 
-  if ( p_pFahrzeuge.empty() )
-    return 0.0;
-
   // 第三个参数 叫做 C++11中的lambda表达式
   auto it = std::find_if( p_pFahrzeuge.begin(), p_pFahrzeuge.end(), [ & ]( const std::unique_ptr< Fahrzeug >& f ) { return f && *f == faz; } );
 
-  //  // 已经找到车了 TODO
-  //  if ( it == p_pFahrzeuge.begin() ) {
-  //    return p_dLaenge;
-  //  }
+  // 已经找到车了,并且这是第一辆车，并且他前面没有停放的停放的车辆
+  if ( it == p_pFahrzeuge.begin() ) {
+    return p_dLaenge;
+  }
 
   // 获取前一辆车的位置, 利用了我们的list底层是一个双向链表
+  // 如果前一辆是停放的话（也就是abs距离为0），就返回路径长度；否则，返回前一辆车的已行驶距离
   auto prevFaz = std::prev( it );
   return ( *prevFaz )->getAbschnittStrecke() == 0 ? p_dLaenge : ( *prevFaz )->getAbschnittStrecke();
 }

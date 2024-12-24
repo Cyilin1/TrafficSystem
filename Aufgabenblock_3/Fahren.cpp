@@ -13,7 +13,7 @@ double Fahren::dStrecke(Fahrzeug &fahrzeug, double dZeitIntervall) {
       //    throw Streckenende(fahrzeug, p_rWeg);
   }
 
-  double dCanRunDis = dBarriere - fahrzeug.getAbschnittStrecke() - dMoeglicheStrecke;
+  double dCanRunDis = p_rWeg.getLaenge() - fahrzeug.getAbschnittStrecke() - dMoeglicheStrecke;
   std::cout << fahrzeug.getName() << " 还可行驶的距离为" << dCanRunDis
             << std::endl;
   return dMoeglicheStrecke;
