@@ -16,9 +16,18 @@ public:
   // 汽车特有行为
   virtual double
   dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
-  virtual void vZeichnen(const Weg &weg) const override;
+  virtual void vZeichnen( const Weg& weg ) const override;
 
-private:
+  //==========================GETTER================================
+  double getTankvolumen() {
+      return p_dTankvolumen;
+  }
+
+  double getTankinhalt() {
+      return p_dTankinhalt;
+  }
+
+  private:
   double p_dVerbrauch;   // 每公里油耗
   double p_dTankvolumen; // 最大油箱容量
   double p_dTankinhalt;  // 当前油量
