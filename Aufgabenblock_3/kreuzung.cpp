@@ -4,6 +4,15 @@
 #include <algorithm>  // for std::find
 #include <random>
 
+std::ostream& operator<<( std::ostream& os, const Fahrzeug& fahrzeug ) {
+    fahrzeug.vAusgeben( os );
+    return os;
+}
+
+std::ostream& operator<<( std::ostream& os, const Weg& fahrzeug ) {
+    fahrzeug.vAusgeben( os );
+    return os;
+}
 /**
  * @brief Kreuzung::vVerbind 连接两个十字路口
  * @param sNamein 去程Weg
@@ -91,20 +100,36 @@ void Kreuzung::vAnnahme( std::unique_ptr< Fahrzeug > fahrzeug, double dStartzeit
     }
 
     // 将车辆停放在第一个路段上
+    if ( dStartzeit == 0.0 ) {
+        pErsterWeg->vAnnahme( std::move( fahrzeug ) );
+        return;
+    }
     pErsterWeg->vAnnahme( std::move( fahrzeug ), dStartzeit );
 }
 
 void Kreuzung::vSimulieren() {
     std::cout << "仿真十字路口 " << getName() << " 的所有路段：" << std::endl;
-
     // 遍历所有发出的路段
     for ( auto& weg : p_Weg ) {
         if ( weg ) {
-            std::cout << "仿真路段 " << weg->getName() << "：" << std::endl;
             weg->vSimulieren();  // 调用每条路段的仿真函数
+            if ( !weg->getFahrzeuge().empty() ) {
+                Fahrzeug::vKopf();
+                for ( auto& fahrzeug : weg->getFahrzeuge() ) {
+                    std::cout << *fahrzeug;
+                    std::cout << std::endl;
+                }
+                std::cout << "==================车辆信息Finished==================" << std::endl;
+            }
         }
         else {
             std::cerr << "警告：十字路口 " << getName() << " 包含无效的路段指针。" << std::endl;
+        }
+        if ( !weg->getFahrzeuge().empty() ) {
+            Weg::vKopf();
+            std::cout << *weg << std::endl;
+            std::cout << "==================================" << std::endl;
+            std::cout << "==================================" << std::endl;
         }
     }
 }

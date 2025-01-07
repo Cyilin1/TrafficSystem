@@ -20,11 +20,11 @@ void Fahrrad::vSimulieren() {
   p_dGesamtstrecke += dGefahreneStrecke;
   p_dGesamtZeit += dZeitDelta;
   p_dZeit = d_GlobaleZeit;
-  //  // 检查是否需要抛出异常
-  //  if (p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge()) {
-  //    throw Streckenende(*this, p_pVerhalten->getWeg());
-  //    //  抛出到达终点异常
-  //  }
+  // 检查是否需要抛出异常
+  if ( p_dAbschnittStrecke >= p_pVerhalten->getWeg().getLaenge() ) {
+    throw Streckenende( *this, p_pVerhalten->getWeg() );
+    //  抛出到达终点异常
+  }
 }
 
 void Fahrrad::vAusgeben() const {
@@ -38,7 +38,7 @@ void Fahrrad::vAusgeben(std::ostream &os) const {
 }
 
 void Fahrrad::vZeichnen(const Weg &weg) const {
-  double relPosition = p_dGesamtstrecke / weg.getLaenge(); // 计算相对位置
+  double relPosition = p_dAbschnittStrecke / weg.getLaenge();      // 计算相对位置
   double kmH = this->dGeschwindigkeit();                   // 获取自行车速度
   bZeichneFahrrad(this->getName(), weg.getName(), relPosition, kmH);
 }

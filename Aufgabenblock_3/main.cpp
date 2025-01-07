@@ -13,15 +13,15 @@ const double refuelInterval = 3.0;
 
 int Simulationsobjekt::p_iMaxID = 0;
 
-std::ostream &operator<<(std::ostream &os, const Fahrzeug &fahrzeug) {
-  fahrzeug.vAusgeben(os);
-  return os;
-}
+// std::ostream &operator<<(std::ostream &os, const Fahrzeug &fahrzeug) {
+//   fahrzeug.vAusgeben(os);
+//   return os;
+// }
 
-std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug) {
-  fahrzeug.vAusgeben(os);
-  return os;
-}
+// std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug) {
+//   fahrzeug.vAusgeben(os);
+//   return os;
+// }
 
 // void vAufgabe_6_3() {
 //   // 初始化图形窗口
@@ -191,19 +191,30 @@ void vAufgabe_7() {
   bZeichneKreuzung( 680, 570 );
 
   // 创建车辆
-  std::unique_ptr< PKW >     bmw  = std::make_unique< PKW >( "BMW", 120.0, 1, 50.0 );
+  std::unique_ptr< PKW >     bmw  = std::make_unique< PKW >( "BMW", 60.0, 1, 50.0 );
   std::unique_ptr< Fahrrad > trek = std::make_unique< Fahrrad >( "Trek", 25.0 );
-  std::unique_ptr< PKW >     audi = std::make_unique< PKW >( "Audi", 100.0, 1, 60.0 );
+  std::unique_ptr< PKW >     audi = std::make_unique< PKW >( "Audi", 70.0, 1, 60.0 );
   kreuzung1->vAnnahme( std::move( bmw ), 0.0 );
   kreuzung1->vAnnahme( std::move( trek ), 0.0 );
   kreuzung1->vAnnahme( std::move( audi ), 0.0 );
 
-  //  // 设置路径
-  //  Weg hin( "Hin", 100.0, Tempolimit::Unlimited, true );
-  //  Weg rueck( "Rueck", 100.0, Tempolimit::Unlimited );
+  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.3小时
+  const double zeitschritt = 0.3;
+  const double simzeit     = 3;
 
-  //  int koordHin[] = { 320, 300, 680, 300 };  // 往路径坐标
-  //  bZeichneStrasse( hin.getName(), rueck.getName(), hin.getLaenge(), 2, koordHin );
+  for ( d_GlobaleZeit = 0; d_GlobaleZeit < simzeit; d_GlobaleZeit += zeitschritt ) {
+    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
+    vSetzeZeit( d_GlobaleZeit );
+
+    kreuzung1->vSimulieren();
+    kreuzung2->vSimulieren();
+    kreuzung3->vSimulieren();
+    kreuzung4->vSimulieren();
+    vSleep( 1000 );  // 暂停2000毫秒
+  }
+
+  // 结束图形会话
+  vBeendeGrafik();
 }
 
 int main() {

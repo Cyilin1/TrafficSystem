@@ -63,7 +63,7 @@ double PKW::dTanken(double dMenge) {
 }
 
 void PKW::vZeichnen(const Weg &weg) const {
-  double relPosition = p_dGesamtstrecke / weg.getLaenge(); // 计算相对位置
+  double relPosition = p_dAbschnittStrecke / weg.getLaenge();      // 计算相对位置
   double kmH = this->dGeschwindigkeit();                   // 获取车辆速度
   double tank = p_dTankinhalt;                             // 获取油箱剩余量
   bZeichnePKW(this->getName(), weg.getName(), relPosition, kmH, tank);

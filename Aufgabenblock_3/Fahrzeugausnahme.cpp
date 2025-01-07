@@ -1,6 +1,12 @@
 ﻿#include "Fahrzeugausnahme.h"
 #include "Fahrzeug.h"
+#include "Weg.h"
 #include "kreuzung.h"
+
+// std::ostream& operator<<( std::ostream& os, const Weg& fahrzeug ) {
+//     fahrzeug.vAusgeben( os );
+//     return os;
+// }
 
 Fahrzeugausnahme::Fahrzeugausnahme(Fahrzeug &fzg, Weg &weg)
     : p_Fahrzeug(fzg), p_Weg(weg) {}
@@ -23,7 +29,8 @@ void Losfahren::vBearbeiten() const {
 // 并转移到所选的路段上。在此过程中，车辆也应被加满油。
 
 void Streckenende::vBearbeiten() const {
-  std::unique_ptr<Fahrzeug> removedVehicle = p_Weg.pAbgabe(p_Fahrzeug);
+  std::unique_ptr< Fahrzeug > removedVehicle = p_Weg.pAbgabe( p_Fahrzeug );
+  //  std::cout << p_Weg << std::endl;
   if (!removedVehicle) {
     std::cerr << "错误：无法删除车辆 " << p_Fahrzeug.getName() << "。"
               << std::endl;
