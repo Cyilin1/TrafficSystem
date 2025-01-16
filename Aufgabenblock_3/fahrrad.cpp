@@ -27,6 +27,10 @@ void Fahrrad::vSimulieren() {
   }
 }
 
+void Fahrrad::vEinlesen( std::istream& is ) {
+  Fahrzeug::vEinlesen( is );
+}
+
 void Fahrrad::vAusgeben() const {
   Fahrzeug::vAusgeben();
   std::cout << std::setw(10) << "-" << std::setw(15) << dGeschwindigkeit();

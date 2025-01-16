@@ -32,6 +32,14 @@ void Fahrzeug::vAusgeben(std::ostream &os) const {
      << std::setprecision(2) << p_dGesamtstrecke << " | ";
 }
 
+void Fahrzeug::vEinlesen( std::istream& is ) {
+  Simulationsobjekt::vEinlesen( is );  // Read p_sName firstly
+  is >> p_dMaxGeschwindigkeit;
+  if ( is.fail() ) {
+      throw std::runtime_error( "Read p_sName failed!" );
+  }
+}
+
 void Fahrzeug::vKopf() {
   Simulationsobjekt::vKopf();
   std::cout << std::setw(10) << "Max Speed" << " | " << std::setw(10)

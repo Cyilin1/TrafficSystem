@@ -4,10 +4,7 @@
 #include <algorithm>  // for std::find
 #include <random>
 
-std::ostream& operator<<( std::ostream& os, const Fahrzeug& fahrzeug ) {
-    fahrzeug.vAusgeben( os );
-    return os;
-}
+Kreuzung::Kreuzung( const std::string& sName, double dTankstelle ) : Simulationsobjekt( sName ), pdTankstelle( dTankstelle ) {}
 
 std::ostream& operator<<( std::ostream& os, const Weg& fahrzeug ) {
     fahrzeug.vAusgeben( os );
@@ -45,7 +42,13 @@ void Kreuzung::vAnnahme( std::shared_ptr< Weg > pWeg ) {
     p_Weg.push_back( std::move( pWeg ) );
 }
 
-Kreuzung::Kreuzung( const std::string& sName, double dTankstelle ) : Simulationsobjekt( sName ), pdTankstelle( dTankstelle ) {}
+void Kreuzung::vEinlesen( std::istream& is ) {
+    Simulationsobjekt::vEinlesen( is );
+    is >> pdTankstelle;
+    if ( is.fail() ) {
+        throw std::runtime_error( "Read p_sName failed!" );
+    }
+}
 
 double Kreuzung::dTanken( Fahrzeug& fzg ) {
     // 检查是否是 PKW 类型

@@ -80,7 +80,7 @@
 
 ## 6.4 作为文件的交通系统（文件流，map）
 
-1. 为仿真对象重载输入运算符 `operator >>()`。类似于输出运算符 `operator <<()` 的解决方案，首先实现一个方法 `vEinlesen(istream&)`。各个类应按如下方式读取数据：
+1. 为SimulationObject类重载输入运算符 `operator >>()`。类似于输出运算符 `operator <<()` 的解决方案，首先实现一个方法 `vEinlesen(istream&)`。各个类应按如下方式读取数据：
 
    - **Simulationsobjekt**: `[Name]`
    - **Kreuzung**: `[Simulationsobjekt] [加油站容量（升）]`
@@ -97,9 +97,9 @@
 2. 为了能够方便地进行不同的仿真，实现一个 `Simulation` 类，该类提供两个方法：`vEinlesen(istream&)` 和 `vSimulieren()`。`vEinlesen` 方法接收一个输入流，并从中生成完整的交通网络。输入流的内容由以下语法的行组成：
 
    - `KREUZUNG <十字路口数据>`
-   - `STRASSE <NameQ> <NameZ> <NameW1> <NameW2> <长度> <速度限制> <超车禁令>`
-   - `PKW <小汽车数据> <NameS> <出发时间>`
-   - `FAHRRAD <自行车数据> <NameS> <出发时间>`
+   - `STRASSE <NameQ> <NameZ> <NameW1> <NameW2> <长度> <Tempolimit> <Überholverbot>`
+   - `PKW <小汽车数据> <NameS> <StartZeit>`
+   - `FAHRRAD <自行车数据> <NameS> <StartZeit>`
 
    
 

@@ -26,12 +26,15 @@ public:
   Fahrzeug();
   explicit Fahrzeug(const std::string &name) : Simulationsobjekt(name) {};
   Fahrzeug(const std::string &name, double maxGeschwindigkeit);
-  virtual ~Fahrzeug() {};
+  virtual ~Fahrzeug(){};
 
+  // =====================INPUT AND OUTPUT============================
   static void vKopf();
   virtual void vAusgeben() const override;
-  virtual void vAusgeben(std::ostream &os) const;
-  virtual void vSimulieren() override;
+  virtual void vAusgeben( std::ostream& os ) const;
+  virtual void vEinlesen( std::istream& is );
+
+  virtual void   vSimulieren() override;
   virtual double dGeschwindigkeit() const;
   virtual double
   dTanken(double dMenge = std::numeric_limits<double>::infinity()) {
@@ -41,6 +44,11 @@ public:
 
   bool operator<(const Fahrzeug &other) const {
     return this->p_dGesamtstrecke < other.p_dGesamtstrecke;
+  }
+
+  friend std::ostream& operator<<( std::ostream& os, const Fahrzeug& fahrzeug ) {
+    fahrzeug.vAusgeben( os );
+    return os;
   }
 
   Fahrzeug &operator=(const Fahrzeug &other) {

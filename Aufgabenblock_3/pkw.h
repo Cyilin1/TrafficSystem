@@ -9,6 +9,8 @@ public:
       double verbrauch = 0.0, double tankvolumen = 50.0);
 
   virtual void vSimulieren() override;
+
+  virtual void   vEinlesen( std::istream& is );
   virtual void vAusgeben() const override;
   virtual void vAusgeben(std::ostream &os) const override;
   virtual double dGeschwindigkeit() const override;

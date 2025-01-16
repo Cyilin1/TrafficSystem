@@ -8,6 +8,8 @@ public:
   Fahrrad(const std::string &name = "", double maxGeschwindigkeit = 0.0);
 
   virtual void vSimulieren() override;
+
+  virtual void vEinlesen( std::istream& is );
   virtual void vAusgeben() const override;
   virtual void vAusgeben(std::ostream &os) const override;
   virtual void vZeichnen(const Weg &weg) const override;

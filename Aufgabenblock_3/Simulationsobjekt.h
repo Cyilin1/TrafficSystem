@@ -38,7 +38,15 @@ public:
 
   // 输出函数
   virtual void vAusgeben() const;
-  static void vKopf();
+  static void  vKopf();
+
+  // 输入函数
+  virtual void vEinlesen( std::istream& is );
+
+  friend std::istream& operator>>( std::istream& is, Simulationsobjekt& obj ) {
+    obj.vEinlesen( is );
+    return is;
+  }
 
   // 通过ID比较相等性
   bool operator==(const Simulationsobjekt &other) const {

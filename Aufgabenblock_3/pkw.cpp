@@ -39,6 +39,14 @@ void PKW::vSimulieren() {
   }
 }
 
+void PKW::vEinlesen( std::istream& is ) {
+  Fahrzeug::vEinlesen( is );
+  is >> p_dVerbrauch >> p_dTankvolumen;
+  if ( is.fail() ) {
+    throw std::runtime_error( "Read p_dVerbrauch/p_dTankvolumen failed!" );
+  }
+}
+
 void PKW::vAusgeben() const {
   Fahrzeug::vAusgeben();
   std::cout << std::setw(10) << p_dTankinhalt << std::setw(15)

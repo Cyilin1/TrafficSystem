@@ -47,4 +47,6 @@ add_executable(Block3 main.cpp
         vertagt_liste.h
         kreuzung.h
         kreuzung.cpp
+        simulation.h
+        simulation.cpp
         ${Auf3_SRC})

@@ -3,10 +3,11 @@
 #include "Simulationsobjekt.h"
 #include "Weg.h"
 
-class Kreuzung : Simulationsobjekt {
+class Kreuzung : public Simulationsobjekt {
 public:
-    Kreuzung( const std::string& sName, double dTankstelle = 0.0 );
+    Kreuzung( const std::string& sName = "", double dTankstelle = 0.0 );
 
+    virtual void vEinlesen( std::istream& is );
     /**
      * @brief vVerbinde 函数作用是将两个十字路口和两个Weg（去程和返程）Bind一起
      * @param sNameHin

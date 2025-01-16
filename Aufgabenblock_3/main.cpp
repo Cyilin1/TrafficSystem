@@ -3,7 +3,9 @@
 #include "fahrrad.h".h "
 #include "kreuzung.h"
 #include "pkw.h"
+#include "simulation.h"
 #include "vertagt_liste.h"
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -12,77 +14,6 @@ const double epsilon = 1e-6;
 const double refuelInterval = 3.0;
 
 int Simulationsobjekt::p_iMaxID = 0;
-
-// std::ostream &operator<<(std::ostream &os, const Fahrzeug &fahrzeug) {
-//   fahrzeug.vAusgeben(os);
-//   return os;
-// }
-
-// std::ostream &operator<<(std::ostream &os, const Weg &fahrzeug) {
-//   fahrzeug.vAusgeben(os);
-//   return os;
-// }
-
-// void vAufgabe_6_3() {
-//   // 初始化图形窗口
-//   const int windowWidth = 800;
-//   const int windowHeight = 500;
-//   if (!bInitialisiereGrafik(windowWidth, windowHeight)) {
-//     std::cerr << "图形界面初始化失败！" << std::endl;
-//     return;
-//   }
-
-//  // 设置路径
-//  Weg hin("Hin", 100.0, Tempolimit::Unlimited);
-//  Weg rueck("Rueck", 100.0, Tempolimit::Unlimited);
-
-//  int koordHin[] = {100, 250, 700, 250}; // 往路径坐标
-//  bZeichneStrasse(hin.getName(), rueck.getName(), hin.getLaenge(), 2, koordHin);
-
-//  // 创建车辆
-//  std::unique_ptr<PKW> bmw = std::make_unique<PKW>("BMW", 120.0, 1, 50.0);
-//  std::unique_ptr<Fahrrad> trek = std::make_unique<Fahrrad>("Trek", 25.0);
-//  std::unique_ptr<PKW> audi = std::make_unique<PKW>("Audi", 100.0, 1, 60.0);
-
-//  // 将车辆添加到路径上
-//  hin.vAnnahme(std::move(bmw));
-//  hin.vAnnahme( std::move( trek ), 3.0 );  // 将自行车设置为延迟1小时后开始
-//  rueck.vAnnahme(std::move(audi));
-
-//  // 模拟一段时间，假设总模拟时间为1小时，每次递增0.3小时
-//  const double zeitschritt = 0.3;
-//  const double simzeit     = 7;
-
-//  for ( d_GlobaleZeit = 0; d_GlobaleZeit < simzeit; d_GlobaleZeit += zeitschritt ) {
-//    std::cout << "当前时间: " << d_GlobaleZeit << " 小时" << std::endl;
-//    vSetzeZeit(d_GlobaleZeit);
-
-//    hin.vSimulieren();
-//    rueck.vSimulieren();
-
-//    Fahrzeug::vKopf();
-//    for (auto &fahrzeug : hin.getFahrzeuge()) {
-//      std::cout << *fahrzeug;
-//      std::cout << std::endl;
-//    }
-//    for (auto &fahrzeug : rueck.getFahrzeuge()) {
-//      std::cout << *fahrzeug;
-//      std::cout << std::endl;
-//    }
-//    std::cout << "==================车辆信息Finished=================="
-//              << std::endl;
-
-//    Weg::vKopf();
-//    std::cout << hin << std::endl;
-//    std::cout << rueck << std::endl;
-//    std::cout << "==================================" << std::endl;
-//    std::cout << "==================================" << std::endl;
-//    vSleep(1000); // 暂停2000毫秒
-//  }
-
-//  // 结束图形会话
-//  vBeendeGrafik();
-//}
 
 ///**
 // * @brief 增加了超车禁令
@@ -217,8 +148,58 @@ void vAufgabe_7() {
   vBeendeGrafik();
 }
 
+void vAufgabe_8() {
+  const std::string filename = "../../VO.dat";
+  std::ifstream     file;
+  try {
+    file.open( filename );
+    PKW      pkw;
+    Fahrrad  fahrrad;
+    Kreuzung kre;
+
+    file >> pkw;
+    file >> fahrrad;
+    file >> kre;
+    Fahrzeug::vKopf();
+    std::cout << pkw << std::endl;
+    std::cout << fahrrad << std::endl;
+  }
+  catch ( const std::ifstream::failure& e ) {
+    std::cerr << "File opeation failed" << std::endl;
+  }
+  catch ( const std::exception& e ) {
+    std::cerr << "Exception occured!" << std::endl;
+    return;
+  }
+}
+
+void vAufgabe_9() {
+  try {
+    Simulation        sim;
+    const std::string filename = "../../Simu.dat";
+    std::ifstream     inputFile( filename );
+    sim.vEinlesen( inputFile, true );
+  }
+  catch ( const std::exception& ex ) {
+    std::cerr << "Catch Exception!!!!!!!" << std::endl;
+  }
+}
+
+void vAufgabe_9a() {
+  try {
+    Simulation        sim;
+    const std::string filename = "../../SimuDisplay.dat";
+    std::ifstream     inputFile( filename );
+    sim.vEinlesen( inputFile, true );
+    sim.vSimulieren( 7, 0.3 );
+  }
+  catch ( const std::exception& ex ) {
+    std::cerr << "Catch Exception!!!!!!!" << std::endl;
+  }
+}
+
 int main() {
-  vAufgabe_7();
+  vAufgabe_9a();
   std::cout << "\n=== 程序结束 ===" << std::endl;
   return 0;
 }
