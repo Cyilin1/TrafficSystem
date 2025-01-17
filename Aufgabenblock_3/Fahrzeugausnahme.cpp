@@ -15,9 +15,9 @@ void Losfahren::vBearbeiten() const {
   std::unique_ptr<Fahrzeug> fahrzeug = p_Weg.pAbgabe(p_Fahrzeug);
   if (fahrzeug) {
     // 重新将该车辆添加为行驶车辆
-    std::cout << "Warning ：车辆 " << p_Fahrzeug.getName() << " 在路径 "
-              << p_Weg.getName() << " 上启动了。" << std::endl;
-    p_Weg.vAnnahme(std::move(fahrzeug));
+    std::cout << "Warning ：车辆 " << p_Fahrzeug.getName() << " 在路径 " << p_Weg.getName() << " 上启动了。" << std::endl;
+    fahrzeug->vZeichnen( p_Weg );  // 绘制车辆
+    p_Weg.vAnnahme( std::move( fahrzeug ) );
   } else {
     std::cerr << "错误：无法启动车辆 " << p_Fahrzeug.getName() << "。"
               << std::endl;
@@ -60,8 +60,8 @@ void Streckenende::vBearbeiten() const {
   // 更换：[旧路段名称] → [新路段名称]
   // 车辆：[车辆信息]
   std::cout << "Time :" << d_GlobaleZeit << std::endl;
-  std::cout << "Kreuzung :" << endKreuzung->getRemainingFuel() << std::endl;
-  std::cout << "Alter :" << p_Weg.getName() << destWeg->getName() << std::endl;
-  std::cout << "Fahrzeug :" << removedVehicle << std::endl;
-  destWeg->vAnnahme( std::move( removedVehicle ) );
+  std::cout << "Kreuzung : " << endKreuzung->getName() << " " << endKreuzung->getRemainingFuel() << std::endl;
+  std::cout << "Alter : " << p_Weg.getName() << " to " << destWeg->getName() << std::endl;
+  std::cout << "Fahrzeug :" << *removedVehicle << std::endl;
+  destWeg->vAnnahme( std::move( removedVehicle ) ); 
 }

@@ -125,7 +125,7 @@ void vAufgabe_7() {
   std::unique_ptr< PKW >     bmw  = std::make_unique< PKW >( "BMW", 60.0, 1, 50.0 );
   std::unique_ptr< Fahrrad > trek = std::make_unique< Fahrrad >( "Trek", 25.0 );
   std::unique_ptr< PKW >     audi = std::make_unique< PKW >( "Audi", 70.0, 1, 60.0 );
-  kreuzung1->vAnnahme( std::move( bmw ), 0.0 );
+  kreuzung1->vAnnahme( std::move( bmw ), 1.0 );
   kreuzung1->vAnnahme( std::move( trek ), 0.0 );
   kreuzung1->vAnnahme( std::move( audi ), 0.0 );
 

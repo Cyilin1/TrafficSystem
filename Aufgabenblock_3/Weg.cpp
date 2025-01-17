@@ -15,8 +15,7 @@ Weg::Weg( const std::string& name, double laenge, std::shared_ptr< Kreuzung > pS
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> pFzg) {
   // 使用 move 将车辆移动到车辆列表
   pFzg->vNeueStrecke(*this);
-  p_pFahrzeuge.push_back(std::move(pFzg));
-  //  p_pFahrzeuge.vAktualisieren();
+  p_pFahrzeuge.push_back( std::move( pFzg ) );
   // 获取最后添加的车辆，通知它新的路径
   //  auto lastElement = std::prev(p_pFahrzeuge.end());
   //  std::cout << "Fahrzeug " << (*lastElement)->getName() << " 被添加到路径 "
@@ -63,18 +62,6 @@ void Weg::vSimulieren() {
     }
   }
   p_pFahrzeuge.vAktualisieren();
-
-  //  for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end();) {
-  //    try {
-  //      (*it)->vSimulieren();
-  //      (*it)->vZeichnen(*this);
-  //      ++it; // 手动增量，以避免在添加或删除元素时失效
-  //    } catch (const Fahrzeugausnahme &ex) {
-  //      ex.vBearbeiten();
-  //      it = p_pFahrzeuge.erase(it); //
-  //      在发生异常时从列表中删除对象，并更新迭代器
-  //    }
-  //  }
 }
 
 void Weg::vAusgeben(std::ostream &os) const {

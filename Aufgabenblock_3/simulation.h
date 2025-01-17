@@ -83,16 +83,17 @@ public:
      * @param dZeitschritt
      */
     void vSimulieren( double dDauer, double dZeitschritt ) {
-        while ( d_GlobaleZeit < dDauer ) {
+        for ( d_GlobaleZeit = 0; d_GlobaleZeit < dDauer; d_GlobaleZeit += dZeitschritt ) {
             vSetzeZeit( d_GlobaleZeit );
             std::cout << "Current Time : " << d_GlobaleZeit << std::endl;
             // 遍历kreuzungMap每一个十字路口
             for ( const auto& [ name, kreuzung ] : kreuzungMap ) {
                 kreuzung->vSimulieren();
             }
-            d_GlobaleZeit += dZeitschritt;
+            std::cout << "============================================================" << std::endl;
             vSleep( 1000 );  // 暂停2000毫秒
         }
+        vBeendeGrafik();
         std::cout << "============================================================" << std::endl;
         std::cout << "Simulation End!" << std::endl;
     }
@@ -177,10 +178,6 @@ public:
         }
         catch ( const std::exception& ex ) {
             std::cerr << "Error : Line " << lineNumber << " failed!" << std::endl;
-        }
-        if ( bMitGrafik ) {
-            vSleep( 2000 );  // 暂停2000毫秒
-            vBeendeGrafik();
         }
     }
 };
