@@ -6,10 +6,6 @@
 
 Kreuzung::Kreuzung( const std::string& sName, double dTankstelle ) : Simulationsobjekt( sName ), pdTankstelle( dTankstelle ) {}
 
-std::ostream& operator<<( std::ostream& os, const Weg& fahrzeug ) {
-    fahrzeug.vAusgeben( os );
-    return os;
-}
 /**
  * @brief Kreuzung::vVerbind 连接两个十字路口
  * @param sNamein 去程Weg

@@ -30,6 +30,8 @@ private:
 public:
     Weg();
     // 带名称、长度和可选速度限制的构造函数
+    Weg( const std::string& name, double laenge, Tempolimit tempolimit = Tempolimit::Unlimited, bool ueberholverbot = false );
+
     Weg( const std::string& name, double laenge, std::shared_ptr< Kreuzung > pStart, Tempolimit tempolimit = Tempolimit::Unlimited, bool ueberholverbot = false );
     Weg( const std::string& name, double laenge, std::shared_ptr< Kreuzung > pStart, std::shared_ptr< Kreuzung > pEnd, Tempolimit tempolimit = Tempolimit::Unlimited, bool ueberholverbot = false );
 
@@ -46,7 +48,11 @@ public:
     // 输出方法
     static void  vKopf();
     virtual void vAusgeben( std::ostream& os ) const;
-    virtual void vAusgeben() const override;
+    virtual void         vAusgeben() const override;
+    friend std::ostream& operator<<( std::ostream& os, const Weg& fahrzeug ) {
+        fahrzeug.vAusgeben( os );
+        return os;
+    }
 
     // 获取指定车辆虚拟障碍的位置
     double getBarriere( const Fahrzeug& faz );

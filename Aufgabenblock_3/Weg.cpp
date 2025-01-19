@@ -6,6 +6,9 @@ Weg::Weg()
     : Simulationsobjekt(""), p_dLaenge(0.0),
       p_eTempolimit(Tempolimit::Unlimited) {}
 
+Weg::Weg( const std::string& name, double laenge, Tempolimit tempolimit, bool ueberholverbot )
+    : Simulationsobjekt( name ), p_dLaenge( laenge ), p_eTempolimit( tempolimit ), bUeberholverbot( ueberholverbot ) {}
+
 Weg::Weg( const std::string& name, double laenge, std::shared_ptr< Kreuzung > pStart, Tempolimit tempolimit, bool ueberholverbot )
     : Simulationsobjekt( name ), p_dLaenge( laenge ), pStartKreuzung( std::move( pStart ) ), pEndKreuzung(), p_eTempolimit( tempolimit ), bUeberholverbot( ueberholverbot ) {}
 
