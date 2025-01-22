@@ -27,9 +27,7 @@ void Fahrzeug::vAusgeben() const {
 
 void Fahrzeug::vAusgeben(std::ostream &os) const {
   Simulationsobjekt::vAusgeben();
-  os << std::setw(10) << std::fixed << std::setprecision(2)
-     << dGeschwindigkeit() << " | " << std::setw(10) << std::fixed
-     << std::setprecision(2) << p_dGesamtstrecke << " | ";
+  os << std::setw( 10 ) << std::fixed << std::setprecision( 2 ) << p_dMaxGeschwindigkeit << " | " << std::setw( 10 ) << std::fixed << std::setprecision( 2 ) << p_dGesamtstrecke << " | ";
 }
 
 void Fahrzeug::vEinlesen( std::istream& is ) {

@@ -1,6 +1,7 @@
 ﻿#include "Weg.h"
 #include "Fahrzeug.h"
 #include "Fahrzeugausnahme.h"
+#include "pkw.h"
 
 Weg::Weg()
     : Simulationsobjekt(""), p_dLaenge(0.0),
@@ -116,6 +117,19 @@ double Weg::getBarriere( const Fahrzeug& faz ) {
   // 获取前一辆车的位置, 利用了我们的list底层是一个双向链表
   // 如果前一辆是停放的话（也就是abs距离为0），就返回路径长度；否则，返回前一辆车的已行驶距离
   auto prevFaz = std::prev( it );
+
+  // 如果车辆抛锚，再返回前一个位置
+  // 4 <-- 3  <-- 2
+  while ( true ) {
+    PKW* pkw = dynamic_cast< PKW* >( prevFaz->get() );
+    if ( !pkw || pkw->getTankinhalt() > 0 ) {
+      break;
+    }
+    if ( prevFaz == p_pFahrzeuge.begin() ) {
+      return p_dLaenge;
+    }
+    prevFaz = std::prev( prevFaz );
+  }
   return ( *prevFaz )->getAbschnittStrecke() == 0 ? p_dLaenge : ( *prevFaz )->getAbschnittStrecke();
 }
 

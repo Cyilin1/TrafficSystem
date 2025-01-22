@@ -28,7 +28,7 @@ void vAufgabe_6_4() {
     }
 
     // 设置路径
-    Weg hin( "Hin", 100.0, Tempolimit::Unlimited, true );
+    Weg hin( "Hin", 100.0, Tempolimit::Landstrasse, true );
     Weg rueck( "Rueck", 100.0, Tempolimit::Unlimited );
 
     int koordHin[] = { 100, 250, 700, 250 };  // 往路径坐标

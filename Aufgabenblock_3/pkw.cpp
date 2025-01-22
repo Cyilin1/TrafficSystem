@@ -49,13 +49,12 @@ void PKW::vEinlesen( std::istream& is ) {
 
 void PKW::vAusgeben() const {
   Fahrzeug::vAusgeben();
-  std::cout << std::setw(10) << p_dTankinhalt << std::setw(15)
-            << dGeschwindigkeit();
+  std::cout << std::setw( 10 ) << p_dTankinhalt << std::setw( 15 ) << this->dGeschwindigkeit();
 }
 
 void PKW::vAusgeben(std::ostream &os) const {
   Fahrzeug::vAusgeben(os);
-  os << std::setw(10) << p_dTankinhalt << std::setw(15) << dGeschwindigkeit();
+  os << std::setw( 10 ) << p_dTankinhalt << std::setw( 15 ) << this->dGeschwindigkeit();
 }
 
 double PKW::dTanken(double dMenge) {
@@ -81,9 +80,8 @@ double PKW::dGeschwindigkeit() const {
   double maxGeschwindigkeit = p_dMaxGeschwindigkeit;
   if (p_pVerhalten) {
     double wegTempolimit = p_pVerhalten->getWeg().dGetTempolimit();
-    //    if (maxGeschwindigkeit > wegTempolimit) {
-    //      std::cout << "超过限速，进行降速操作！！" << std::endl;
-    //      maxGeschwindigkeit = wegTempolimit;
+    //    if ( maxGeschwindigkeit > wegTempolimit ) {
+    //        std::cout << "超过限速，进行降速操作！！" << std::endl;
     //    }
     return std::min(maxGeschwindigkeit, wegTempolimit); // 取最小值
   }
